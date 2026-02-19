@@ -9,7 +9,7 @@ import Food from "./components/Home/Steps/StepTwo/Food";
 import CardHeader from "./components/Navbar/CardHeader";
 
 export default function Home() {
-  const [stepNo, setStepNo] = useState<number>(2);
+  const [stepNo, setStepNo] = useState<number>(0);
 
   const steps = [
     {
