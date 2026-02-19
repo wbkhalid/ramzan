@@ -55,6 +55,8 @@ const Food = ({
     }
   };
 
+  console.log("testing");
+
   const handleServingPhotoChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
