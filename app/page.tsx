@@ -78,7 +78,7 @@ export default function Home() {
                   ))}
                 </Flex>
               </div>
-              {stepNo === 1 && <Setup />}
+              {stepNo === 1 && <Setup setStepNo={setStepNo} />}
               {stepNo === 2 && <Food />}
               {stepNo === 3 && <Feedback />}
             </div>

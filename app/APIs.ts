@@ -9,6 +9,7 @@ export const SAHULAT_BAZAR_MONITORING_API = "/api/SahulatBazarMonitoring";
 export const SAHULAT_BAZAR_DASHBOARD_API = "/api/Dashboard";
 export const STALL_API = "/api/Stalls";
 export const COMMODITY_API = "/api/Commodities";
+export const CHECK_LIST_API = "/api/CheckLists";
 
 // NEXTJS ROUTES API
 export const NEXTJS_AUTH_API = "/api/my-auth";

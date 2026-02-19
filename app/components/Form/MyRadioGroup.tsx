@@ -1,7 +1,7 @@
 "use client";
 
 import { Flex, RadioCards, Text } from "@radix-ui/themes";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaCircle, FaRegCircle } from "react-icons/fa";
 
 interface Option {
@@ -11,7 +11,8 @@ interface Option {
 
 interface Props {
   options: Option[];
-  defaultValue?: string;
+  value?: string; // Controlled value
+  defaultValue?: string; // Optional fallback
   color?: "green" | "orange" | "blue" | "red";
   columns?: string;
   onChange?: (value: string) => void;
@@ -19,18 +20,26 @@ interface Props {
 
 const MyRadioGroup = ({
   options,
+  value,
   defaultValue,
   color = "green",
   columns,
   onChange,
 }: Props) => {
-  const [selectedOption, setSelectedOption] = useState(
+  const [internalValue, setInternalValue] = useState(
     defaultValue ?? options[0]?.value,
   );
 
-  const handleChange = (value: string) => {
-    setSelectedOption(value);
-    onChange?.(value);
+  // If value prop changes from outside, update internal state
+  useEffect(() => {
+    if (value !== undefined) {
+      setInternalValue(value);
+    }
+  }, [value]);
+
+  const handleChange = (val: string) => {
+    setInternalValue(val);
+    onChange?.(val);
   };
 
   return (
@@ -38,7 +47,7 @@ const MyRadioGroup = ({
       <RadioCards.Root
         color={color}
         columns={columns ?? String(options.length)}
-        value={selectedOption}
+        value={internalValue}
         onValueChange={handleChange}
       >
         {options.map((option) => (
@@ -49,7 +58,7 @@ const MyRadioGroup = ({
             style={{ justifyContent: "start" }}
           >
             <Flex align="center" gap="2" className="w-full">
-              {selectedOption === option.value ? (
+              {internalValue === option.value ? (
                 <FaCircle size={14} className="text-(--green-9) shrink-0" />
               ) : (
                 <FaRegCircle size={14} className="text-medium-gray shrink-0" />

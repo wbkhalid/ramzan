@@ -131,6 +131,7 @@ const DailyUserInspectionForm = ({
             "Incharge details saved successfully.",
         );
         Cookies.set("monitoringId", response?.data?.data?.id);
+        Cookies.set("dastarkhawanId", response?.data?.data?.dastarkhawanId);
         setStepNo(1);
       }
 

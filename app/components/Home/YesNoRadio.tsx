@@ -4,8 +4,23 @@ import { Flex, RadioCards, Text } from "@radix-ui/themes";
 import { useState } from "react";
 import { FaCircle, FaRegCircle } from "react-icons/fa";
 
-const YesNoRadio = () => {
-  const [selectedOption, setSelectedOption] = useState<"yes" | "no">("no");
+interface YesNoRadioProps {
+  value?: boolean | null; // true = Yes, false = No
+  onChange?: (value: boolean) => void;
+}
+
+const YesNoRadio = ({ value, onChange }: YesNoRadioProps) => {
+  // Convert boolean value to "yes"/"no" string for internal use
+  const [selectedOption, setSelectedOption] = useState<"yes" | "no">(
+    value === true ? "yes" : value === false ? "no" : "no",
+  );
+
+  const handleChange = (val: "yes" | "no") => {
+    setSelectedOption(val);
+    if (onChange) {
+      onChange(val === "yes");
+    }
+  };
 
   return (
     <Flex maxWidth="450px">
@@ -13,9 +28,8 @@ const YesNoRadio = () => {
         color="green"
         columns="2"
         value={selectedOption}
-        onValueChange={(value) => setSelectedOption(value as "yes" | "no")}
+        onValueChange={(val) => handleChange(val as "yes" | "no")}
       >
-        {/* YES */}
         <RadioCards.Item value="yes" className="py-2.5! px-3! w-fit!">
           <Flex align="center" gap="2">
             {selectedOption === "yes" ? (
@@ -29,7 +43,6 @@ const YesNoRadio = () => {
           </Flex>
         </RadioCards.Item>
 
-        {/* NO */}
         <RadioCards.Item value="no" className="py-2.5! px-3! w-fit!">
           <Flex align="center" gap="2">
             {selectedOption === "no" ? (
