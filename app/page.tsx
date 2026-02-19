@@ -9,7 +9,7 @@ import Food from "./components/Home/Steps/StepTwo/Food";
 import CardHeader from "./components/Navbar/CardHeader";
 
 export default function Home() {
-  const [stepNo, setStepNo] = useState<number>(0);
+  const [stepNo, setStepNo] = useState<number>(2);
 
   const steps = [
     {
@@ -79,7 +79,7 @@ export default function Home() {
                 </Flex>
               </div>
               {stepNo === 1 && <Setup setStepNo={setStepNo} />}
-              {stepNo === 2 && <Food />}
+              {stepNo === 2 && <Food setStepNo={setStepNo} />}
               {stepNo === 3 && <Feedback />}
             </div>
 
