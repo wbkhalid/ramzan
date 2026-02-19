@@ -33,6 +33,8 @@ const Food = ({
   const dastarkhawanId = Cookies.get("dastarkhawanId");
   const parsedDastarkhawanId = dastarkhawanId ? Number(dastarkhawanId) : null;
 
+  console.log(parsedDastarkhawanId, "..//...//");
+
   const addMenuItem = () => {
     if (menuInput.trim() && !menuItems.includes(menuInput.trim())) {
       setMenuItems((prev) => [...prev, menuInput.trim()]);
