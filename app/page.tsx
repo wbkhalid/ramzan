@@ -80,7 +80,7 @@ export default function Home() {
               </div>
               {stepNo === 1 && <Setup setStepNo={setStepNo} />}
               {stepNo === 2 && <Food setStepNo={setStepNo} />}
-              {stepNo === 3 && <Feedback />}
+              {stepNo === 3 && <Feedback setStepNo={setStepNo} />}
             </div>
 
             {/* <MCQ
