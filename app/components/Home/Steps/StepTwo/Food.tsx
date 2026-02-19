@@ -30,6 +30,8 @@ const Food = ({
   const [menuPhotoUrl, setMenuPhotoUrl] = useState("");
   const [servingPhotoUrl, setServingPhotoUrl] = useState("");
   const userId = Cookies.get("userId");
+  const dastarkhawanId = Cookies.get("dastarkhawanId");
+  const parsedDastarkhawanId = dastarkhawanId ? Number(dastarkhawanId) : null;
 
   const addMenuItem = () => {
     if (menuInput.trim() && !menuItems.includes(menuInput.trim())) {
@@ -73,7 +75,7 @@ const Food = ({
   const handleSubmit = async () => {
     try {
       const payload = {
-        dastarkhawanId: Number(Cookies.get("dastarkhawanId")),
+        dastarkhawanId: parsedDastarkhawanId,
         submissionDate: new Date().toISOString(),
         userId: userId,
         menuItems,
