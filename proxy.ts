@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const PUBLIC_ROUTES = ["/login"];
+const PUBLIC_ROUTES = ["/login", "/reports"];
 const ADMIN_ROUTES = ["/update-location", "/new-location"]; // pages only Admin can access
 
 export function proxy(req: NextRequest) {
