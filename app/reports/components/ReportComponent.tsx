@@ -19,7 +19,7 @@ const ReportComponent = () => {
   const handleApply = async () => {
     if (!selectedDate) {
       toast.error("Please select date");
-      return;
+      return [];
     }
 
     try {
@@ -42,7 +42,10 @@ const ReportComponent = () => {
   };
 
   const getFormattedExportData = () => {
-    if (!dashboardData?.items || dashboardData?.items.length === 0) return [];
+    if (!dashboardData?.items || dashboardData?.items.length === 0) {
+      toast.warning("No data to export");
+      return [];
+    }
 
     return dashboardData?.items.map((item, index) => ({
       "Sr #": index + 1,
@@ -66,12 +69,9 @@ const ReportComponent = () => {
 
   const handleExportExcel = () => {
     const formattedData = getFormattedExportData();
-    if (formattedData.length === 0) return;
-
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Complaints");
-
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
     XLSX.writeFile(workbook, `${selectedDate} Report.xlsx`);
   };
 
