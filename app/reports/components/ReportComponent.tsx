@@ -5,7 +5,8 @@ import React, { useState } from "react";
 import apiClient from "@/app/services/api-client";
 import { toast } from "react-toastify";
 import DashboardView from "./DashboardView";
-import { DashboardResponse } from "../page"; // adjust path if needed
+import { DashboardResponse } from "../page";
+import * as XLSX from "xlsx";
 
 const ReportComponent = () => {
   const [open, setOpen] = useState(false);
@@ -40,6 +41,40 @@ const ReportComponent = () => {
     }
   };
 
+  const getFormattedExportData = () => {
+    if (!dashboardData?.items || dashboardData?.items.length === 0) return [];
+
+    return dashboardData?.items.map((item, index) => ({
+      "Sr #": index + 1,
+      Name: item?.dastarkhawanName,
+      Division: item?.divisionName || "-",
+      District: item?.districtName,
+      Tehsil: item?.tehsilName || "-",
+      Latitude: item.latitude || "-",
+      Longitude: item.longitude || "-",
+      "Serve Capacity": item.serveCapacity || "-",
+      "philanthropist Name": item.philanthropistName || "-",
+      "Monitoring Status": item.monitoringStatus || "-",
+      "Step 1 : Setup": item.step1Done ? "Completed" : "Not Completed",
+      "Step 2 : Food": item.step2Done ? "Completed" : "Not Completed",
+      "Step 3 : Feed back": item.step3Done ? "Completed" : "Not Completed",
+      "Number of Served": item.numberServed || "-",
+      "Inspection Incharge Name": item.inspectionInchargeName || "-",
+      "DC Focal Person Name": item.dcFocalPersonName || "-",
+    }));
+  };
+
+  const handleExportExcel = () => {
+    const formattedData = getFormattedExportData();
+    if (formattedData.length === 0) return;
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Complaints");
+
+    XLSX.writeFile(workbook, `${selectedDate} Report.xlsx`);
+  };
+
   return (
     <>
       {/* Header */}
@@ -47,34 +82,43 @@ const ReportComponent = () => {
         <Flex justify="between" align="center">
           <Text weight="bold">Daily Daster Khwan Statistics</Text>
 
-          <Dialog.Root open={open} onOpenChange={setOpen}>
-            <Dialog.Trigger>
-              <Button variant="soft">Select Date</Button>
-            </Dialog.Trigger>
+          <div className="flex gap-1 items-center">
+            <div
+              className="border rounded-lg p-1  cursor-pointer text-sm"
+              onClick={handleExportExcel}
+            >
+              Export Data
+            </div>
+            <Dialog.Root open={open} onOpenChange={setOpen}>
+              <Dialog.Trigger>
+                <Button variant="soft">Select Date</Button>
+              </Dialog.Trigger>
 
-            <Dialog.Content maxWidth="450px">
-              <p className="text-center font-bold text-lg mb-3">Select Date</p>
+              <Dialog.Content maxWidth="450px">
+                <p className="text-center font-bold text-lg mb-3">
+                  Select Date
+                </p>
 
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                className="border p-2 rounded w-full"
-              />
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  className="border p-2 rounded w-full"
+                />
 
-              <Button
-                onClick={handleApply}
-                disabled={loading}
-                className="w-full! mt-4! bg-green-500! cursor-pointer!"
-              >
-                {loading ? "Loading..." : "Apply"}
-              </Button>
-            </Dialog.Content>
-          </Dialog.Root>
+                <Button
+                  onClick={handleApply}
+                  disabled={loading}
+                  className="w-full! mt-4! bg-green-500! cursor-pointer!"
+                >
+                  {loading ? "Loading..." : "Apply"}
+                </Button>
+              </Dialog.Content>
+            </Dialog.Root>
+          </div>
         </Flex>
       </div>
 
-      {/* Simple Table */}
       {dashboardData && <DashboardView data={dashboardData} />}
     </>
   );

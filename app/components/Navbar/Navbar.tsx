@@ -65,7 +65,7 @@ const Navbar = () => {
                 <Flex className="py-3! px-6.5! bg-light-gray! rounded-[10px]! text-slate-gray! gap-2.5!">
                   <HugeiconsIcon icon={Calendar02Icon} size={24} />
                   <Text size="3" className="font-semibold!">
-                    Day 1 of 30
+                    Day 2 of 30
                   </Text>
                 </Flex>
                 <Badge

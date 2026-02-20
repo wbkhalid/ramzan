@@ -29,17 +29,17 @@ const DashboardView = ({ data }: { data: DashboardResponse }) => {
               <th className="border p-2">Division</th>
               <th className="border p-2">District</th>
               <th className="border p-2">Tehsil</th>
-              <th className="border p-2">Lat</th>
-              <th className="border p-2">Lon</th>
-              <th className="border p-2">serve Capacity</th>
-              <th className="border p-2">philanthropist Name</th>
-              <th className="border p-2">monitoring Status</th>
+              <th className="border p-2">Latitude</th>
+              <th className="border p-2">Longitude</th>
+              <th className="border p-2">Serve Capacity</th>
+              <th className="border p-2">Philanthropist Name</th>
+              <th className="border p-2">Monitoring Status</th>
               <th className="border p-2">Step 1 : Setup</th>
               <th className="border p-2">Step 2 : Food</th>
               <th className="border p-2">Step 3 : Feed back</th>
-              <th className="border p-2">number of Served</th>
-              <th className="border p-2">inspection Incharge Name</th>
-              <th className="border p-2">dc Focal Person Name</th>
+              <th className="border p-2">Number of Served</th>
+              <th className="border p-2">Inspection Incharge Name</th>
+              <th className="border p-2">DC Focal Person Name</th>
             </tr>
           </thead>
 
@@ -64,7 +64,7 @@ const DashboardView = ({ data }: { data: DashboardResponse }) => {
                 <td className="border p-2">
                   {item.step2Done ? "Completed" : "Not Completed"}
                 </td>
-                <td className="border p-2">{item.serveCapacity}</td>
+                <td className="border p-2">{item.numberServed}</td>
                 <td className="border p-2">{item.inspectionInchargeName}</td>
                 <td className="border p-2">{item.dcFocalPersonName}</td>
               </tr>
