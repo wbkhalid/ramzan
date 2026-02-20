@@ -51,53 +51,57 @@ const Navbar = () => {
   return (
     <>
       <nav className="bg-white">
-        <div className="px-6.75">
+        <div className="px-6.75 ">
           <Flex align="center" justify="between" wrap="wrap">
             <AppBrand />
-
-            <Flex
-              align="center"
-              className="gap-5.25"
-              wrap="wrap"
-              justify="center"
-            >
-              <Flex className="py-3! px-6.5! bg-light-gray! rounded-[10px]! text-slate-gray! gap-2.5!">
-                <HugeiconsIcon icon={Calendar02Icon} size={24} />
-                <Text size="3" className="font-semibold!">
-                  Day 1 of 30
-                </Text>
-              </Flex>
-              <Badge color="green" className="py-3! px-6.5! rounded-[10px]!">
-                <Flex align="center" className="gap-2.5!">
-                  <FaCircle className="text-(--green-9)" size={9} />
+            <div className="px-6.75 hidden! lg:block!">
+              <Flex
+                align="center"
+                className="gap-5.25"
+                wrap="wrap"
+                justify="center"
+              >
+                <Flex className="py-3! px-6.5! bg-light-gray! rounded-[10px]! text-slate-gray! gap-2.5!">
+                  <HugeiconsIcon icon={Calendar02Icon} size={24} />
                   <Text size="3" className="font-semibold!">
-                    Submitted Today
+                    Day 1 of 30
                   </Text>
                 </Flex>
-              </Badge>
+                <Badge
+                  color="green"
+                  className="py-3! px-6.5! rounded-[10px]! xs:hidden md:block"
+                >
+                  <Flex align="center" className="gap-2.5!">
+                    <FaCircle className="text-(--green-9)" size={9} />
+                    <Text size="3" className="font-semibold!">
+                      Submitted Today
+                    </Text>
+                  </Flex>
+                </Badge>
 
-              <div className="h-10 w-px bg-[#D3D3D3]"></div>
+                <div className="h-10 w-px bg-[#D3D3D3]"></div>
 
-              <IconButton
-                className="block lg:!hidden"
-                radius="full"
-                variant="soft"
-                size="4"
-                onClick={() => setShowDropDown(!showDropDown)}
-              >
-                {showDropDown ? (
-                  <RxCross2 size={28} />
-                ) : (
-                  <GiHamburgerMenu size={28} />
-                )}
-              </IconButton>
-              <Box className="!hidden lg:!block">
-                <AuthStatus
-                  session={session}
-                  onLogout={() => setSession(null)}
-                />
-              </Box>
-            </Flex>
+                <IconButton
+                  className="block lg:!hidden"
+                  radius="full"
+                  variant="soft"
+                  size="4"
+                  onClick={() => setShowDropDown(!showDropDown)}
+                >
+                  {showDropDown ? (
+                    <RxCross2 size={28} />
+                  ) : (
+                    <GiHamburgerMenu size={28} />
+                  )}
+                </IconButton>
+                <Box className="!hidden lg:!block">
+                  <AuthStatus
+                    session={session}
+                    onLogout={() => setSession(null)}
+                  />
+                </Box>
+              </Flex>
+            </div>
           </Flex>
         </div>
         <div className="border-b border-[#3A3A3A]/10"></div>

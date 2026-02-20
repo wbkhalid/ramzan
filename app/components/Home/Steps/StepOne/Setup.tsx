@@ -388,7 +388,7 @@ const Setup = ({
                   className="flex-col md:flex-row gap-2 w-full!"
                 >
                   <Flex
-                    align="center"
+                    // align="center"
                     justify="between"
                     className="flex-col md:flex-row border-[1.5px] border-[#EFF0F2] py-2.5 ps-3 pe-7.5 rounded-[7px] w-full"
                     gap="4"
@@ -401,12 +401,12 @@ const Setup = ({
                       heading={checklist.title}
                       label={checklist.description}
                       icon={
-                        <div className="p-3 bg-(--blue-9)/20 rounded-[10px]">
+                        <div className="p-2 bg-(--blue-9)/20 rounded-[10px]">
                           <Image
                             className="rounded-full"
                             src={iconSrc}
-                            width={24}
-                            height={24}
+                            width={20}
+                            height={20}
                             style={{ width: "24px", height: "24px" }}
                             alt="clean"
                           />
