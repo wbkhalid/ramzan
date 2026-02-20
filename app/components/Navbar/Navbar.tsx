@@ -32,6 +32,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
 import { toast } from "sonner";
 import AppBrand from "./AppBrand";
+import { IoIosLogOut } from "react-icons/io";
 
 const Navbar = () => {
   const [session, setSession] = useState<SessionResponse | null>(null);
@@ -94,14 +95,17 @@ const Navbar = () => {
                     <GiHamburgerMenu size={28} />
                   )}
                 </IconButton>
-                <Box className="!hidden lg:!block">
+                {/* <Box className="!hidden lg:!block">
                   <AuthStatus
                     session={session}
                     onLogout={() => setSession(null)}
                   />
-                </Box>
+                </Box> */}
               </Flex>
             </div>
+            <Box className="lg:hidden">
+              <AuthStatus session={session} onLogout={() => setSession(null)} />
+            </Box>
           </Flex>
         </div>
         <div className="border-b border-[#3A3A3A]/10"></div>
@@ -276,44 +280,50 @@ const AuthStatus = ({
   };
 
   return (
-    <Box className="hidden md:block ">
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <Box className="bg-[rgba(245,247,250,0.3)] rounded-full pe-4 p-1">
-            <Flex align="center" gap="4">
-              <Box>
-                <Avatar
-                  src="/images/user.png"
-                  fallback="?"
-                  radius="full"
-                  size="3"
-                />
-              </Box>
-              <Flex direction="column" gap="1">
-                <Heading
-                  as="h6"
-                  className="!text-[0.938rem] !font-semibold !leading-[100%] text-dark!"
-                >
-                  {session.user?.fullName}
-                </Heading>
-                <Text as="p" className="text-[0.563rem] text-cool-gray!">
-                  {session.user?.email ?? "asd"}
-                </Text>
+    <>
+      <Box className="block! md:hidden! text-red-500" onClick={handleLogout}>
+        <IoIosLogOut />
+      </Box>
+
+      <Box className="hidden! md:block! ">
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Box className="bg-[rgba(245,247,250,0.3)] rounded-full pe-4 p-1">
+              <Flex align="center" gap="4">
+                <Box>
+                  <Avatar
+                    src="/images/user.png"
+                    fallback="?"
+                    radius="full"
+                    size="3"
+                  />
+                </Box>
+                <Flex direction="column" gap="1">
+                  <Heading
+                    as="h6"
+                    className="!text-[0.938rem] !font-semibold !leading-[100%] text-dark!"
+                  >
+                    {session.user?.fullName}
+                  </Heading>
+                  <Text as="p" className="text-[0.563rem] text-cool-gray!">
+                    {session.user?.email ?? "asd"}
+                  </Text>
+                </Flex>
               </Flex>
-            </Flex>
-          </Box>
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content>
-          {/* <DropdownMenu.Label>
+            </Box>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            {/* <DropdownMenu.Label>
             <Text size="2">admin@gmail.com</Text>
           </DropdownMenu.Label> */}
-          {/* <DropdownMenu.Item>
+            {/* <DropdownMenu.Item>
             <Link href="/settings">Settings</Link>
           </DropdownMenu.Item> */}
-          <DropdownMenu.Item onClick={handleLogout}>Logout</DropdownMenu.Item>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
-    </Box>
+            <DropdownMenu.Item onClick={handleLogout}>Logout</DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      </Box>
+    </>
   );
 };
 
