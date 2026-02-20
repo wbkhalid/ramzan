@@ -30,7 +30,7 @@ const CardHeader = ({
   gap,
 }: Props) => {
   return (
-    <Flex style={{ gap: gap ? gap : "22px" }} align="center" wrap="wrap">
+    <Flex style={{ gap: gap ? gap : "2px" }} align="center" wrap="wrap">
       {icon && icon}
 
       <Flex gap="0" direction="column">
@@ -45,6 +45,7 @@ const CardHeader = ({
           size={labelSize}
           weight={labelWeight}
           style={{ color: labelColor }}
+          className="mb-1!"
         >
           {label}
         </Text>

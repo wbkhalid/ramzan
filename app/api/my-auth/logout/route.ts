@@ -10,9 +10,12 @@ export async function POST() {
   res.cookies.set("token", "", { maxAge: 0, path: "/" });
   res.cookies.set("districtId", "", { maxAge: 0, path: "/" });
   res.cookies.set("divisionId", "", { maxAge: 0, path: "/" });
+  res.cookies.set("tehsilId", "", { maxAge: 0, path: "/" });
   res.cookies.set("email", "", { maxAge: 0, path: "/" });
   res.cookies.set("fullName", "", { maxAge: 0, path: "/" });
   res.cookies.set("userId", "", { maxAge: 0, path: "/" });
+  res.cookies.set("role", "", { maxAge: 0, path: "/" });
+  res.cookies.set("dastarkhawanId", "", { maxAge: 0, path: "/" });
 
   return res;
 }

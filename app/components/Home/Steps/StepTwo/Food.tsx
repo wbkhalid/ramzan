@@ -237,8 +237,14 @@ const Food = ({
       </div>
 
       {/* Footer */}
-      <div className="border-t border-medium-gray pt-3.75 -mx-7.5!">
-        <Flex align="center" gap="2" justify="between" className="px-5!">
+      <div className="border-t border-medium-gray pt-3.75 ">
+        <Flex
+          direction={{ initial: "column", md: "row" }}
+          justify={{ md: "between" }}
+          align={{ md: "center" }}
+          gap="3"
+          className="w-full"
+        >
           <Flex align="center" gap="2">
             <IoIosInformationCircle size={20} className="text-dark-gray" />
             <Text size="2" weight="medium">

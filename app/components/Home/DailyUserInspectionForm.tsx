@@ -1,7 +1,7 @@
 "use client";
 import { Badge, Button, Flex, Text, TextField } from "@radix-ui/themes";
 import classnames from "classnames";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Spinner from "../Spinner";
 import UploadImagesForm from "./Steps/UploadImagesForm";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -37,10 +37,15 @@ const DailyUserInspectionForm = ({
     address: string;
   } | null>(null);
   const userId = Cookies.get("userId");
+  const dastarkhawanId = Cookies.get("dastarkhawanId");
   const tehsilId = Cookies.get("tehsilId");
   const parsedTehsilId = tehsilId ? Number(tehsilId) : null;
 
-  console.log(userId, "parsedTehsilId");
+  useEffect(() => {
+    if (dastarkhawanId) {
+      setStepNo(1);
+    }
+  }, []);
 
   const { data: dastarKhwanLocations } = useDastarKhwanLocations(
     parsedTehsilId || 0,
@@ -130,8 +135,10 @@ const DailyUserInspectionForm = ({
           response?.data?.responseMessage ||
             "Incharge details saved successfully.",
         );
-        Cookies.set("monitoringId", response?.data?.data?.id);
-        Cookies.set("dastarkhawanId", response?.data?.data?.dastarkhawanId);
+        // Cookies.set("monitoringId", response?.data?.data?.id);
+        Cookies.set("dastarkhawanId", response?.data?.data?.dastarkhawanId, {
+          expires: 1,
+        });
         setStepNo(1);
       }
 

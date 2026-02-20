@@ -64,7 +64,7 @@ export default function Home() {
           </Badge> */}
             </Flex>
             <div className="py-3.75">
-              <div className="mt-3">
+              <div className="my-3">
                 <Flex gap="2" justify="center">
                   {steps.map((d, i) => (
                     <Button
@@ -72,6 +72,7 @@ export default function Home() {
                       variant={stepNo === i + 1 ? "solid" : "soft"}
                       key={i + 1}
                       onClick={() => setStepNo(i + 1)}
+                      className="text-[11px]!"
                     >
                       Step {i + 1}: {d.label}
                     </Button>

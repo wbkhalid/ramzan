@@ -24,7 +24,7 @@ const MyBadge = ({ label, variant = "deadline" }: Props) => {
 
   return (
     <Badge
-      className="py-3! px-6.5! rounded-[10px]!"
+      className="py-1.5! md:py-3! px-3! md:px-6.5! rounded-[10px]!"
       style={{ backgroundColor: styles.bg }}
     >
       <Flex align="center" className="gap-2.5!">

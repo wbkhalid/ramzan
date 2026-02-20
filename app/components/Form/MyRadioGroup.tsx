@@ -43,10 +43,14 @@ const MyRadioGroup = ({
   };
 
   return (
-    <Flex maxWidth="450px">
+    <Flex
+      maxWidth={{ xs: "450px", md: "w-full" }}
+      direction={{ xs: "column", md: "row" }}
+      gap="0.5"
+    >
       <RadioCards.Root
         color={color}
-        columns={columns ?? String(options.length)}
+        columns={{ initial: "2", md: String(options.length) }}
         value={internalValue}
         onValueChange={handleChange}
       >
@@ -54,16 +58,16 @@ const MyRadioGroup = ({
           <RadioCards.Item
             key={option.value}
             value={option.value}
-            className="py-2.5! px-3! w-fit!"
+            className="py-1.5! lg:py-2.5!  px-1.5! lg:px-3! w-[40%]"
             style={{ justifyContent: "start" }}
           >
-            <Flex align="center" gap="2" className="w-full">
+            <Flex align="center" gap="1" className="w-full">
               {internalValue === option.value ? (
-                <FaCircle size={14} className="text-(--green-9) shrink-0" />
+                <FaCircle size={12} className="text-(--green-9) shrink-0" />
               ) : (
-                <FaRegCircle size={14} className="text-medium-gray shrink-0" />
+                <FaRegCircle size={12} className="text-medium-gray shrink-0" />
               )}
-              <Text weight="medium" size="2">
+              <Text weight="medium" className="text-xs lg:text-sm ">
                 {option.label}
               </Text>
             </Flex>

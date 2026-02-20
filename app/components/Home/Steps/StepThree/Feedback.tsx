@@ -7,7 +7,6 @@ import { Video01Icon } from "@hugeicons/core-free-icons";
 import { IoIosInformationCircle } from "react-icons/io";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-
 import CustomRadixTextarea from "@/app/components/Form/CustomRadixTextarea";
 import MyRadioGroup from "@/app/components/Form/MyRadioGroup";
 import MyBadge from "@/app/components/MyBadge";
@@ -30,9 +29,6 @@ const Feedback = ({
 
   const userId = Cookies.get("userId");
 
-  // -------------------------------
-  // Upload Multiple After Serving Photos
-  // -------------------------------
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       const uploadedFiles = await uploadMultipleFiles(
@@ -127,7 +123,7 @@ const Feedback = ({
         <Badge
           radius="full"
           color="green"
-          className="font-bold! text-[17px]! py-2.25! px-3.5!"
+          className="font-bold! text-sm  md:text-base! py-2.25! px-3.5!"
         >
           1
         </Badge>
@@ -135,64 +131,68 @@ const Feedback = ({
         <div className="w-full">
           <Flex justify="between" className="mb-5" wrap="wrap" gap="2">
             <CardHeader
-              headingSize="5"
+              headingSize="4"
               heading="Pictorial Evidence After Food Serving"
               label="Upload photographic documentation"
             />
             <MyBadge label="Deadline : 8:00 PM" />
           </Flex>
 
-          <UploadImagesForm
-            label="After Food Serving"
-            description="Upload Images"
-            onChange={handleImageChange}
-          />
+          <div className="flex flex-col gap-2.5">
+            <div>
+              <UploadImagesForm
+                label="After Food Serving"
+                description="Upload Images"
+                onChange={handleImageChange}
+              />
 
-          {/* Image Preview */}
-          {afterServingPhotoUrls.length > 0 && (
-            <div className="flex flex-wrap gap-3 mt-4">
-              {afterServingPhotoUrls.map((url, index) => (
-                <div
-                  key={index}
-                  className="relative w-28 h-28 rounded-lg overflow-hidden border"
-                >
-                  <img
-                    src={url}
-                    alt={`after-serving-${index}`}
-                    className="w-full h-full object-cover"
-                  />
+              {/* Image Preview */}
+              {afterServingPhotoUrls.length > 0 && (
+                <div className="flex flex-wrap gap-3 mt-4">
+                  {afterServingPhotoUrls.map((url, index) => (
+                    <div
+                      key={index}
+                      className="relative w-16 h-16 rounded-lg overflow-hidden border"
+                    >
+                      <img
+                        src={url}
+                        alt={`after-serving-${index}`}
+                        className="w-full h-full object-cover"
+                      />
 
-                  {/* Remove Button */}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setAfterServingPhotoUrls((prev) =>
-                        prev.filter((_, i) => i !== index),
-                      )
-                    }
-                    className="absolute top-1 right-1 bg-black/60 text-white text-xs px-1 rounded"
-                  >
-                    ✕
-                  </button>
+                      {/* Remove Button */}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setAfterServingPhotoUrls((prev) =>
+                            prev.filter((_, i) => i !== index),
+                          )
+                        }
+                        className="absolute top-1 right-1 bg-black/60 text-white text-xs px-1 rounded"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
-          )}
+            <UploadImagesForm
+              label="Feedback Video"
+              description="Upload 30 sec Video"
+              message="MP4 (Max 10MB)"
+              accept="video/mp4"
+              type="video"
+              onChange={handleFeedbackVideoChange}
+            />
+          </div>
 
           {/* Feedback Video */}
-          <UploadImagesForm
-            label="Feedback Video"
-            description="Upload 30 sec Video"
-            message="MP4 (Max 10MB)"
-            accept="video/mp4"
-            type="video"
-            onChange={handleFeedbackVideoChange}
-          />
 
           {/* Feedback Grade */}
           <div className="mt-6">
             <CardHeader
-              headingSize="5"
+              headingSize="4"
               heading="Feedback by Food Officer"
               label="Feedback"
             />
@@ -225,8 +225,14 @@ const Feedback = ({
       </div>
 
       {/* Footer */}
-      <div className="border-t border-medium-gray pt-3.75 -mx-7.5!">
-        <Flex align="center" gap="2" justify="between" className="px-5!">
+      <div className="border-t border-medium-gray pt-3.75 ">
+        <Flex
+          direction={{ initial: "column", md: "row" }}
+          justify={{ md: "between" }}
+          align={{ md: "center" }}
+          gap="3"
+          className="w-full"
+        >
           <Flex align="center" gap="2">
             <IoIosInformationCircle size={20} />
             <Text size="2" weight="medium">

@@ -365,12 +365,12 @@ const Setup = ({
                 <Flex
                   key={checklist.id}
                   align="center"
-                  className="gap-2.5 w-full!"
+                  className="flex-col md:flex-row gap-2 w-full!"
                 >
                   <Flex
                     align="center"
                     justify="between"
-                    className="border-[1.5px] border-[#EFF0F2] py-2.5 ps-3 pe-7.5 rounded-[7px] w-full"
+                    className="flex-col md:flex-row border-[1.5px] border-[#EFF0F2] py-2.5 ps-3 pe-7.5 rounded-[7px] w-full"
                     gap="4"
                   >
                     <CardHeader
@@ -439,12 +439,19 @@ const Setup = ({
         </Box>
       </Flex>
 
-      <Flex justify="between" align="center" className="mt-6">
-        <Text>
+      <Flex
+        direction={{ initial: "column", md: "row" }}
+        justify={{ md: "between" }}
+        align={{ md: "center" }}
+        gap="3"
+        className="mt-6 w-full"
+      >
+        <Text className="text-sm">
           <IoIosInformationCircle className="inline mr-1" />
           All fields marked with * are mandatory
         </Text>
-        <Button type="submit" color="green">
+
+        <Button type="submit" color="green" className="w-full md:w-auto">
           Save & Continue
         </Button>
       </Flex>
