@@ -5,9 +5,9 @@ import { DashboardResponse } from "../page"; // adjust path
 const DashboardView = ({ data }: { data: DashboardResponse }) => {
   return (
     <div className="bg-white border rounded-lg overflow-hidden">
-      <div className="p-4 font-bold border-b grid grid-cols-5 gap-3">
+      <div className="p-4 font-bold border-b grid grid-cols-4 gap-3">
         <p>Total Dastarkhawan: {data.summary.totalDastarkhawan}</p>
-        <p>Monitored: {data.summary.monitored}</p>
+        {/* <p>Monitored: {data.summary.monitored}</p> */}
         <p>Not Monitored: {data.summary.notMonitored}</p>
         <p>Fully Monitored: {data.summary.fullyMonitored}</p>
         <p>Partially Monitored: {data.summary.partiallyMonitored}</p>
