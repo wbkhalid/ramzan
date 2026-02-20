@@ -115,7 +115,7 @@ const Feedback = ({
           response?.data?.responseMessage ||
             "Step 3 (Feedback) submitted successfully",
         );
-
+        Cookies.remove("dastarkhawanId");
         setStepNo(0);
       }
 
