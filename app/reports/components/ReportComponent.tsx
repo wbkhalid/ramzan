@@ -65,7 +65,7 @@ const ReportComponent = () => {
               <Button
                 onClick={handleApply}
                 disabled={loading}
-                className="w-full mt-4 bg-green-600"
+                className="w-full! mt-4! bg-green-500! cursor-pointer!"
               >
                 {loading ? "Loading..." : "Apply"}
               </Button>

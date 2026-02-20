@@ -29,8 +29,17 @@ const DashboardView = ({ data }: { data: DashboardResponse }) => {
               <th className="border p-2">Division</th>
               <th className="border p-2">District</th>
               <th className="border p-2">Tehsil</th>
-              <th className="border p-2">Capacity</th>
-              <th className="border p-2">Status</th>
+              <th className="border p-2">Lat</th>
+              <th className="border p-2">Lon</th>
+              <th className="border p-2">serve Capacity</th>
+              <th className="border p-2">philanthropist Name</th>
+              <th className="border p-2">monitoring Status</th>
+              <th className="border p-2">Step 1 : Setup</th>
+              <th className="border p-2">Step 2 : Food</th>
+              <th className="border p-2">Step 3 : Feed back</th>
+              <th className="border p-2">number of Served</th>
+              <th className="border p-2">inspection Incharge Name</th>
+              <th className="border p-2">dc Focal Person Name</th>
             </tr>
           </thead>
 
@@ -41,8 +50,23 @@ const DashboardView = ({ data }: { data: DashboardResponse }) => {
                 <td className="border p-2">{item.divisionName}</td>
                 <td className="border p-2">{item.districtName}</td>
                 <td className="border p-2">{item.tehsilName}</td>
+                <td className="border p-2">{item.latitude}</td>
+                <td className="border p-2">{item.longitude}</td>
                 <td className="border p-2">{item.serveCapacity}</td>
+                <td className="border p-2">{item.philanthropistName}</td>
                 <td className="border p-2">{item.monitoringStatus}</td>
+                <td className="border p-2">
+                  {item.step0Done ? "Completed" : "Not Completed"}
+                </td>
+                <td className="border p-2">
+                  {item.step1Done ? "Completed" : "Not Completed"}
+                </td>
+                <td className="border p-2">
+                  {item.step2Done ? "Completed" : "Not Completed"}
+                </td>
+                <td className="border p-2">{item.serveCapacity}</td>
+                <td className="border p-2">{item.inspectionInchargeName}</td>
+                <td className="border p-2">{item.dcFocalPersonName}</td>
               </tr>
             ))}
           </tbody>
