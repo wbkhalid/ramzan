@@ -39,8 +39,11 @@ export interface DashboardItem {
   step2SubmittedAt: string | null;
   step3SubmittedAt: string | null;
   inspectionInchargeName: string | null;
+  inspectionInchargePhone: string | null;
   dcFocalPersonName: string | null;
+  dcFocalPersonPhone: string | null;
   numberServed: number | null;
+  menuItems: string[] | null;
 }
 
 export interface DashboardResponse {
