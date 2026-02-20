@@ -4,6 +4,7 @@ import { Badge, Flex, Text } from "@radix-ui/themes";
 import { ReactNode, useRef } from "react";
 
 interface Props {
+  isLoading?: boolean;
   label?: string;
   selfieUrl?: string;
   description?: string;
@@ -34,6 +35,7 @@ const UploadImagesForm = ({
   multiple = false,
   type = "image",
   onChange,
+  isLoading = false,
 }: Props) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -54,6 +56,13 @@ const UploadImagesForm = ({
         className="hidden"
         onChange={onChange}
       />
+      {isLoading && (
+        <Flex justify="center" className="mb-4">
+          <Text size="2" color="green">
+            Uploading...
+          </Text>
+        </Flex>
+      )}
 
       <Flex justify="center" className="mb-4">
         {selfieUrl ? (

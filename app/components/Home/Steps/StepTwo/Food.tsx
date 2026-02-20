@@ -32,6 +32,8 @@ const Food = ({
   const userId = Cookies.get("userId");
   const dastarkhawanId = Cookies.get("dastarkhawanId");
   const parsedDastarkhawanId = dastarkhawanId ? Number(dastarkhawanId) : null;
+  const [menuLoading, setMenuLoading] = useState(false);
+  const [servingLoading, setServingLoading] = useState(false);
 
   console.log(parsedDastarkhawanId, "..//...//");
 
@@ -44,6 +46,7 @@ const Food = ({
 
   const handleMenuChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
+      setMenuLoading(true);
       const response = await uploadFile(e, "dastarkhawan_menu_photo");
 
       if (response?.data?.fileUrl) {
@@ -52,6 +55,8 @@ const Food = ({
       }
     } catch (error) {
       toast.error("Menu photo upload failed");
+    } finally {
+      setMenuLoading(false);
     }
   };
 
@@ -59,6 +64,7 @@ const Food = ({
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     try {
+      setServingLoading(true);
       const response = await uploadFile(e, "dastarkhawan_serving_photo");
 
       if (response?.data?.fileUrl) {
@@ -67,6 +73,8 @@ const Food = ({
       }
     } catch (error) {
       toast.error("Serving photo upload failed");
+    } finally {
+      setServingLoading(false);
     }
   };
 
@@ -183,6 +191,7 @@ const Food = ({
                 description="Menu Photos"
                 onChange={handleMenuChange}
                 selfieUrl={menuPhotoUrl}
+                isLoading={menuLoading}
               />
             </div>
           </div>
@@ -230,6 +239,7 @@ const Food = ({
                 description="Serving Photos"
                 onChange={handleServingPhotoChange}
                 selfieUrl={servingPhotoUrl}
+                isLoading={servingLoading}
               />
             </div>
           </div>

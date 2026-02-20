@@ -26,11 +26,14 @@ const Feedback = ({
   const [feedbackVideoUrl, setFeedbackVideoUrl] = useState("");
   const [feedbackGrade, setFeedbackGrade] = useState<number>(1);
   const [additionalRemarks, setAdditionalRemarks] = useState("");
+  const [afterFoodLoading, setAfterFoodLoading] = useState(false);
+  const [videoLoading, setVideoLoading] = useState(false);
 
   const userId = Cookies.get("userId");
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
+      setAfterFoodLoading(true);
       const uploadedFiles = await uploadMultipleFiles(
         e,
         "dastarkhawan_after_serving_photo",
@@ -43,6 +46,8 @@ const Feedback = ({
       toast.success("Images uploaded successfully");
     } catch (error) {
       toast.error("Error uploading images");
+    } finally {
+      setAfterFoodLoading(false);
     }
   };
 
@@ -50,6 +55,7 @@ const Feedback = ({
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     try {
+      setVideoLoading(true);
       const response = await uploadFile(e, "dastarkhawan_feedback_video");
 
       if (response?.data?.fileUrl) {
@@ -58,6 +64,8 @@ const Feedback = ({
       }
     } catch (error) {
       toast.error("Video upload failed");
+    } finally {
+      setVideoLoading(false);
     }
   };
 
@@ -144,6 +152,7 @@ const Feedback = ({
                 label="After Food Serving"
                 description="Upload Images"
                 onChange={handleImageChange}
+                isLoading={afterFoodLoading}
               />
 
               {/* Image Preview */}
@@ -184,6 +193,7 @@ const Feedback = ({
               accept="video/mp4"
               type="video"
               onChange={handleFeedbackVideoChange}
+              isLoading={videoLoading}
             />
           </div>
 

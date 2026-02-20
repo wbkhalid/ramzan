@@ -1,12 +1,11 @@
 "use client";
 
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { Flex, Badge, Box, Button, Text } from "@radix-ui/themes";
-import { useState, useEffect, SetStateAction, Dispatch } from "react";
 import { LocationShare02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
 import { IoIosInformationCircle } from "react-icons/io";
-
 import CustomRadixInput from "@/app/components/Form/CustomRadixInput";
 import MyRadioGroup from "@/app/components/Form/MyRadioGroup";
 import UploadImagesForm from "../UploadImagesForm";
@@ -48,6 +47,15 @@ const Setup = ({
       photoUrl?: string;
     }[]
   >([]);
+
+  // Loading States
+  const [dcPhotoLoading, setDcPhotoLoading] = useState(false);
+  const [setupPhotoLoading, setSetupPhotoLoading] = useState(false);
+  const [brandingPhotoLoading, setBrandingPhotoLoading] = useState(false);
+  const [checklistLoadingId, setChecklistLoadingId] = useState<number | null>(
+    null,
+  );
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   // Initialize checklistAnswers whenever checkLists load
   useEffect(() => {
@@ -92,14 +100,25 @@ const Setup = ({
   const handleUpload = async (
     category: string,
     key: keyof typeof formData,
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const response = await uploadFile(e, category);
-    if (response?.data?.fileUrl) {
-      setFormData((prev) => ({
-        ...prev,
-        [key]: response.data.fileUrl,
-      }));
+    try {
+      setLoading(true);
+
+      const response = await uploadFile(e, category);
+
+      if (response?.data?.fileUrl) {
+        setFormData((prev) => ({
+          ...prev,
+          [key]: response.data.fileUrl,
+        }));
+        toast.success("Photo uploaded successfully");
+      }
+    } catch (error) {
+      toast.error("Upload failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,15 +126,25 @@ const Setup = ({
     questionId: number,
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const response = await uploadFile(e, "dastarkhawan_checklist_item_photo");
-    if (response?.data?.fileUrl) {
-      setChecklistAnswers((prev) =>
-        prev.map((item) =>
-          item.questionId === questionId
-            ? { ...item, photoUrl: response.data.fileUrl }
-            : item,
-        ),
-      );
+    try {
+      setChecklistLoadingId(questionId);
+
+      const response = await uploadFile(e, "dastarkhawan_checklist_item_photo");
+
+      if (response?.data?.fileUrl) {
+        setChecklistAnswers((prev) =>
+          prev.map((item) =>
+            item.questionId === questionId
+              ? { ...item, photoUrl: response.data.fileUrl }
+              : item,
+          ),
+        );
+        toast.success("Photo uploaded successfully");
+      }
+    } catch (error) {
+      toast.error("Upload failed");
+    } finally {
+      setChecklistLoadingId(null);
     }
   };
 
@@ -169,26 +198,16 @@ const Setup = ({
   };
 
   const icons = [
-    {
-      id: 1,
-      src: "/icons/clean.svg",
-    },
-    {
-      id: 2,
-      src: "/icons/bus-03.svg",
-    },
-    {
-      id: 3,
-      src: "/icons/droplet.svg",
-    },
-    {
-      id: 4,
-      src: "/icons/shield-02.svg",
-    },
+    { id: 1, src: "/icons/clean.svg" },
+    { id: 2, src: "/icons/bus-03.svg" },
+    { id: 3, src: "/icons/droplet.svg" },
+    { id: 4, src: "/icons/shield-02.svg" },
   ];
 
   const handleSubmit = async () => {
     try {
+      setSubmitLoading(true);
+
       const payload = {
         dastarkhawanId: Number(Cookies.get("dastarkhawanId")),
         submissionDate: new Date().toISOString(),
@@ -218,16 +237,13 @@ const Setup = ({
       );
 
       if (response?.data?.responseCode === 200) {
-        toast.success(
-          response?.data?.responseMessage ||
-            "Step 1 (Setup) submitted successfully",
-        );
-        // Cookies.set("monitoringId", response?.data?.data?.id);
-        // Cookies.set("dastarkhawanId", response?.data?.data?.dastarkhawanId);
+        toast.success("Step 1 (Setup) submitted successfully");
         setStepNo(2);
       }
     } catch (error) {
       toast.error("Submission failed");
+    } finally {
+      setSubmitLoading(false);
     }
   };
 
@@ -238,7 +254,7 @@ const Setup = ({
         handleSubmit();
       }}
     >
-      {/* 1. DC Office Focal Person */}
+      {/* DC Office Focal Person */}
       <Flex direction="column" gap="4">
         <Badge
           radius="full"
@@ -278,14 +294,16 @@ const Setup = ({
             handleUpload(
               "dastarkhawan_dc_focal_photo",
               "dcFocalPersonPhotoUrl",
+              setDcPhotoLoading,
               e,
             )
           }
           selfieUrl={formData.dcFocalPersonPhotoUrl}
+          isLoading={dcPhotoLoading}
         />
       </Flex>
 
-      {/* 2. Setup Details */}
+      {/* Setup Details */}
       <Flex direction="column" gap="4" className="mt-6">
         <Badge
           radius="full"
@@ -315,14 +333,16 @@ const Setup = ({
             handleUpload(
               "dastarkhawan_setup_location_photo",
               "setupLocationPhotoUrl",
+              setSetupPhotoLoading,
               e,
             )
           }
           selfieUrl={formData.setupLocationPhotoUrl}
+          isLoading={setupPhotoLoading}
         />
       </Flex>
 
-      {/* 3. Branding Details */}
+      {/* Branding Details */}
       <Flex direction="column" gap="4" className="mt-6">
         <Badge
           radius="full"
@@ -352,13 +372,19 @@ const Setup = ({
         <UploadImagesForm
           description="Branding Photos"
           onChange={(e) =>
-            handleUpload("dastarkhawan_branding_photo", "brandingPhotoUrl", e)
+            handleUpload(
+              "dastarkhawan_branding_photo",
+              "brandingPhotoUrl",
+              setBrandingPhotoLoading,
+              e,
+            )
           }
           selfieUrl={formData.brandingPhotoUrl}
+          isLoading={brandingPhotoLoading}
         />
       </Flex>
 
-      {/* 4. Checklist */}
+      {/* Checklist */}
       <Flex direction="column" gap="4" className="mt-6">
         <Badge
           radius="full"
@@ -378,17 +404,14 @@ const Setup = ({
               const answer = checklistAnswers.find(
                 (a) => a.questionId === checklist.id,
               );
-
               const iconSrc = icons[index % icons.length]?.src;
 
               return (
                 <Flex
                   key={checklist.id}
-                  // align="center"
                   className="flex-col md:flex-row gap-2 w-full!"
                 >
                   <Flex
-                    // align="center"
                     justify="between"
                     className="flex-col md:flex-row border-[1.5px] border-[#EFF0F2] py-2.5 ps-3 pe-7.5 rounded-[7px] w-full"
                     gap="4"
@@ -408,13 +431,11 @@ const Setup = ({
                             width={20}
                             height={20}
                             style={{ width: "24px", height: "24px" }}
-                            alt="clean"
+                            alt="icon"
                           />
                         </div>
                       }
                     />
-
-                    {/* Radio options */}
                     <MyRadioGroup
                       options={
                         checklist.answerType === 1
@@ -451,6 +472,7 @@ const Setup = ({
                     description="Upload Photo"
                     onChange={(e) => handleChecklistPhoto(checklist.id, e)}
                     selfieUrl={answer?.photoUrl ?? ""}
+                    isLoading={checklistLoadingId === checklist.id}
                   />
                 </Flex>
               );
@@ -459,6 +481,7 @@ const Setup = ({
         </Box>
       </Flex>
 
+      {/* Footer */}
       <Flex
         direction={{ initial: "column", md: "row" }}
         justify={{ md: "between" }}
@@ -468,11 +491,21 @@ const Setup = ({
       >
         <Text className="text-sm">
           <IoIosInformationCircle className="inline mr-1" />
-          All fields marked with * are mandatory
+          All fields marked with <Text color="red">*</Text> are mandatory
         </Text>
 
-        <Button type="submit" color="green" className="w-full md:w-auto">
-          Save & Continue
+        <Button
+          type="submit"
+          color="green"
+          disabled={
+            submitLoading ||
+            dcPhotoLoading ||
+            setupPhotoLoading ||
+            brandingPhotoLoading ||
+            checklistLoadingId !== null
+          }
+        >
+          {submitLoading ? "Saving..." : "Save & Continue"}
         </Button>
       </Flex>
     </form>
