@@ -34,7 +34,7 @@ export default function Home() {
             height={188}
             className="w-full h-auto mb-5"
           />
-          <div className="card px-7.5 py-5 overflow-hidden">
+          <div className="card px-3 md:px-7.5 py-5 overflow-hidden">
             <Flex
               align="center"
               justify="between"

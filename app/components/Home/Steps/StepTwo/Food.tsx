@@ -122,7 +122,7 @@ const Food = ({
               heading="All Menu Details"
               label="Menu Details"
             />
-            <MyBadge label="Deadline : 6:00 PM" />
+            {/* <MyBadge label="Deadline : 6:00 PM" /> */}
           </Flex>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-2.5 items-end">

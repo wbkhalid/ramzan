@@ -168,7 +168,25 @@ const Setup = ({
     }
   };
 
-  // --- Submission ---
+  const icons = [
+    {
+      id: 1,
+      src: "/icons/clean.svg",
+    },
+    {
+      id: 2,
+      src: "/icons/bus-03.svg",
+    },
+    {
+      id: 3,
+      src: "/icons/droplet.svg",
+    },
+    {
+      id: 4,
+      src: "/icons/shield-02.svg",
+    },
+  ];
+
   const handleSubmit = async () => {
     try {
       const payload = {
@@ -356,15 +374,17 @@ const Setup = ({
         />
         <Box>
           <Flex direction="column" className="gap-2.5">
-            {checkLists?.map((checklist) => {
+            {checkLists?.map((checklist, index) => {
               const answer = checklistAnswers.find(
                 (a) => a.questionId === checklist.id,
               );
 
+              const iconSrc = icons[index % icons.length]?.src;
+
               return (
                 <Flex
                   key={checklist.id}
-                  align="center"
+                  // align="center"
                   className="flex-col md:flex-row gap-2 w-full!"
                 >
                   <Flex
@@ -384,7 +404,7 @@ const Setup = ({
                         <div className="p-3 bg-(--blue-9)/20 rounded-[10px]">
                           <Image
                             className="rounded-full"
-                            src="/icons/clean.svg"
+                            src={iconSrc}
                             width={24}
                             height={24}
                             style={{ width: "24px", height: "24px" }}

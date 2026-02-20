@@ -135,7 +135,7 @@ const Feedback = ({
               heading="Pictorial Evidence After Food Serving"
               label="Upload photographic documentation"
             />
-            <MyBadge label="Deadline : 8:00 PM" />
+            {/* <MyBadge label="Deadline : 8:00 PM" /> */}
           </Flex>
 
           <div className="flex flex-col gap-2.5">
