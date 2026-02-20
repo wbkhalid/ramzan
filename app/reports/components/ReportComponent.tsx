@@ -50,7 +50,6 @@ const ReportComponent = () => {
     return dashboardData?.items.map((item, index) => ({
       "Sr #": index + 1,
       Name: item?.dastarkhawanName,
-      Division: item?.divisionName || "-",
       District: item?.districtName,
       Tehsil: item?.tehsilName || "-",
       Latitude: item.latitude || "-",
@@ -63,7 +62,10 @@ const ReportComponent = () => {
       "Step 3 : Feed back": item.step3Done ? "Completed" : "Not Completed",
       "Number of Served": item.numberServed || "-",
       "Inspection Incharge Name": item.inspectionInchargeName || "-",
+      "Inspection Incharge Phone #": item.inspectionInchargePhone || "-",
       "DC Focal Person Name": item.dcFocalPersonName || "-",
+      "DC Focal Person Phone #": item.dcFocalPersonPhone || "-",
+      "Menu Items": item?.menuItems?.join(", ") || "-",
     }));
   };
 
