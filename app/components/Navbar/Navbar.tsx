@@ -40,6 +40,14 @@ const Navbar = () => {
   const [showDropDown, setShowDropDown] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const startDate = new Date("2026-02-19");
+
+  const today = new Date();
+
+  // Calculate difference in days
+  const diffTime = today.getTime() - startDate.getTime(); // milliseconds
+  const dayNumber = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
   useEffect(() => {
     setClient(true);
 
@@ -65,7 +73,7 @@ const Navbar = () => {
                 <Flex className="py-3! px-6.5! bg-light-gray! rounded-[10px]! text-slate-gray! gap-2.5!">
                   <HugeiconsIcon icon={Calendar02Icon} size={24} />
                   <Text size="3" className="font-semibold!">
-                    Day 3 of 30
+                    Day {dayNumber} of 30
                   </Text>
                 </Flex>
                 <Badge

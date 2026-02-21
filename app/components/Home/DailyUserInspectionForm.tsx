@@ -48,7 +48,7 @@ const DailyUserInspectionForm = ({
     if (stepCompleted) {
       setStepNo(1);
     }
-  }, [stepCompleted]);
+  }, [stepCompleted, dastarkhawanId]);
 
   // const todayDate = new Date().toISOString().split("T")[0];
 
