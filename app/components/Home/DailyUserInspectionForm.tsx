@@ -171,7 +171,7 @@ const DailyUserInspectionForm = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <Flex direction="column" className="mb-5! gap-2! xl:gap-8!">
+      <Flex direction="column" className="mb-5! gap-1.5!">
         <label>
           <Text
             as="p"
