@@ -5,12 +5,10 @@ import { DashboardResponse } from "../page"; // adjust path
 const DashboardView = ({ data }: { data: DashboardResponse }) => {
   return (
     <div className="bg-white border rounded-lg overflow-hidden">
-      <div className="p-4 font-bold border-b grid grid-cols-4 gap-3">
+      {/* <div className="p-4 font-bold border-b grid grid-cols-4 gap-3">
         <p>Total Dastarkhawan: {data.summary.totalDastarkhawan}</p>
-        {/* <p>Monitored: {data.summary.monitored}</p> */}
         <p>Not Monitored: {data.summary.notMonitored}</p>
-        <p>Fully Monitored: {data.summary.fullyMonitored}</p>
-        <p>Partially Monitored: {data.summary.partiallyMonitored}</p>
+        <p>Monitored: {data.summary.fullyMonitored}</p>
       </div>
       <div className="p-4 font-bold border-b grid grid-cols-6 gap-3 text-xs">
         <p>Profile Completed: {data.summary.step0Completed}</p>
@@ -19,7 +17,7 @@ const DashboardView = ({ data }: { data: DashboardResponse }) => {
         <p>Step 3 : Feed back {data.summary.step3Completed}</p>
         <p>Total Capacity: {data.summary.totalCapacity}</p>
         <p>Total People Served: {data.summary.totalPeopleServed}</p>
-      </div>
+      </div> */}
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm border-collapse">

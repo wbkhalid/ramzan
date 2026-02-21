@@ -48,15 +48,7 @@ const DailyUserInspectionForm = ({
     if (stepCompleted) {
       setStepNo(1);
     }
-  }, [stepCompleted, dastarkhawanId]);
-
-  // const todayDate = new Date().toISOString().split("T")[0];
-
-  // const parsedDastarkhawanId = dastarkhawanId ? Number(dastarkhawanId) : 0;
-
-  // const { data } = useStepsStatus(parsedDastarkhawanId, todayDate);
-
-  // console.log(data, "data");
+  }, [stepCompleted]);
 
   // useEffect(() => {
   //   if (dastarkhawanId) {

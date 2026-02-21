@@ -19,7 +19,7 @@ export default function Home() {
 
   const { data } = useStepsStatus(parsedDastarkhawanId, todayDate);
 
-  console.log(data, "dATAA");
+  // console.log(data, "dATAA");
 
   const steps = [
     {

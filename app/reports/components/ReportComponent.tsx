@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog, Button, Flex, Text } from "@radix-ui/themes";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import apiClient from "@/app/services/api-client";
 import { toast } from "react-toastify";
 import DashboardView from "./DashboardView";
@@ -16,22 +16,23 @@ const ReportComponent = () => {
     null,
   );
 
-  const handleApply = async () => {
-    if (!selectedDate) {
-      toast.error("Please select date");
-      return [];
-    }
+  const [statusFilter, setStatusFilter] = useState<
+    "All" | "NotMonitored" | "FullyMonitored"
+  >("All");
 
+  // Fetch dashboard data
+  const fetchDashboardData = async (date: string, status: string = "All") => {
+    if (!date) return;
     try {
       setLoading(true);
-
       const response = await apiClient.get(
-        `/api/AdminDashboard/dashboard-summary?date=${selectedDate}`,
+        `/api/AdminDashboard/dashboard-summary?date=${date}${
+          status !== "All" ? `&status=${status}` : ""
+        }`,
       );
 
       if (response?.data?.responseCode === 200) {
         setDashboardData(response.data.data);
-        setOpen(false);
         toast.success("Report loaded successfully");
       }
     } catch (error) {
@@ -41,13 +42,29 @@ const ReportComponent = () => {
     }
   };
 
+  const handleApply = () => {
+    if (!selectedDate) {
+      toast.error("Please select date");
+      return;
+    }
+    fetchDashboardData(selectedDate, statusFilter);
+    setOpen(false);
+  };
+
+  // Re-fetch data on status change
+  useEffect(() => {
+    if (selectedDate) {
+      fetchDashboardData(selectedDate, statusFilter);
+    }
+  }, [statusFilter]);
+
   const getFormattedExportData = () => {
     if (!dashboardData?.items || dashboardData?.items.length === 0) {
       toast.warning("No data to export");
       return [];
     }
 
-    return dashboardData?.items.map((item, index) => ({
+    return dashboardData.items.map((item, index) => ({
       "Sr #": index + 1,
       Name: item?.dastarkhawanName,
       District: item?.districtName,
@@ -55,7 +72,7 @@ const ReportComponent = () => {
       Latitude: item.latitude || "-",
       Longitude: item.longitude || "-",
       "Serve Capacity": item.serveCapacity || "-",
-      "philanthropist Name": item.philanthropistName || "-",
+      "Philanthropist Name": item.philanthropistName || "-",
       "Monitoring Status": item.monitoringStatus || "-",
       "Step 1 : Setup": item.step1Done ? "Completed" : "Not Completed",
       "Step 2 : Food": item.step2Done ? "Completed" : "Not Completed",
@@ -74,7 +91,7 @@ const ReportComponent = () => {
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
-    XLSX.writeFile(workbook, `${selectedDate} Report.xlsx`);
+    XLSX.writeFile(workbook, `${selectedDate || "Report"}.xlsx`);
   };
 
   return (
@@ -82,15 +99,16 @@ const ReportComponent = () => {
       {/* Header */}
       <div className="bg-white border rounded-lg p-4 mb-6">
         <Flex justify="between" align="center">
-          <Text weight="bold">Daily Daster Khwan Statistics</Text>
+          <Text weight="bold">Daily Dastarkhawan Statistics</Text>
 
           <div className="flex gap-1 items-center">
             <div
-              className="border rounded-lg p-1  cursor-pointer text-sm"
+              className="border rounded-lg p-1 cursor-pointer text-sm"
               onClick={handleExportExcel}
             >
               Export Data
             </div>
+
             <Dialog.Root open={open} onOpenChange={setOpen}>
               <Dialog.Trigger>
                 <Button variant="soft">Select Date</Button>
@@ -119,7 +137,63 @@ const ReportComponent = () => {
             </Dialog.Root>
           </div>
         </Flex>
+
+        {selectedDate && (
+          <div className="mt-4 flex gap-4 items-center">
+            <label className="flex items-center gap-1">
+              <input
+                type="radio"
+                name="status"
+                value="All"
+                checked={statusFilter === "All"}
+                onChange={() => setStatusFilter("All")}
+              />
+              <Text>All</Text>
+            </label>
+            <label className="flex items-center gap-1">
+              <input
+                type="radio"
+                name="status"
+                value="NotMonitored"
+                checked={statusFilter === "NotMonitored"}
+                onChange={() => setStatusFilter("NotMonitored")}
+              />
+              <Text>Not Monitored</Text>
+            </label>
+            <label className="flex items-center gap-1">
+              <input
+                type="radio"
+                name="status"
+                value="FullyMonitored"
+                checked={statusFilter === "FullyMonitored"}
+                onChange={() => setStatusFilter("FullyMonitored")}
+              />
+              <Text>Fully Monitored</Text>
+            </label>
+          </div>
+        )}
       </div>
+
+      {/* Summary */}
+      {dashboardData && (
+        <div className="bg-white border rounded-lg overflow-hidden mb-2!">
+          <div className="p-4 font-bold border-b grid grid-cols-4 gap-3">
+            <p>Total Dastarkhawan: {dashboardData.summary.totalDastarkhawan}</p>
+            <p>Not Monitored: {dashboardData.summary.notMonitored}</p>
+            <p>Monitored: {dashboardData.summary.fullyMonitored}</p>
+          </div>
+          <div className="p-4 font-bold border-b grid grid-cols-6 gap-3 text-xs">
+            <p>Profile Completed: {dashboardData.summary.step0Completed}</p>
+            <p>Step 1 : Setup {dashboardData.summary.step1Completed}</p>
+            <p>Step 2 : Food {dashboardData.summary.step2Completed}</p>
+            <p>Step 3 : Feed back {dashboardData.summary.step3Completed}</p>
+            <p>Total Capacity: {dashboardData.summary.totalCapacity}</p>
+            <p>
+              Total People Served: {dashboardData.summary.totalPeopleServed}
+            </p>
+          </div>
+        </div>
+      )}
 
       {dashboardData && <DashboardView data={dashboardData} />}
     </>
