@@ -138,7 +138,7 @@ export default function Home() {
           }}
         >
           <div className="flex justify-center">
-            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] sm:w-[70%] md:w-[50%] lg:w-[30%] bg-white rounded-[23px] px-5 md:p-7.5 lg:p-7.5">
+            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] sm:w-[70%] md:w-[50%] lg:w-[30%] bg-white rounded-[23px] px-5 md:p-7.5 lg:p-7.5 max-h-[80dvh] overflow-y-scroll">
               <div className="mb-5">
                 <Heading align="center" className="text-[20px] text-dark!">
                   Daily User Inspection
