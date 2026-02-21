@@ -5,26 +5,11 @@ import { DashboardResponse } from "../page"; // adjust path
 const DashboardView = ({ data }: { data: DashboardResponse }) => {
   return (
     <div className="bg-white border rounded-lg overflow-hidden">
-      {/* <div className="p-4 font-bold border-b grid grid-cols-4 gap-3">
-        <p>Total Dastarkhawan: {data.summary.totalDastarkhawan}</p>
-        <p>Not Monitored: {data.summary.notMonitored}</p>
-        <p>Monitored: {data.summary.fullyMonitored}</p>
-      </div>
-      <div className="p-4 font-bold border-b grid grid-cols-6 gap-3 text-xs">
-        <p>Profile Completed: {data.summary.step0Completed}</p>
-        <p>Step 1 : Setup {data.summary.step1Completed}</p>
-        <p>Step 2 : Food {data.summary.step2Completed}</p>
-        <p>Step 3 : Feed back {data.summary.step3Completed}</p>
-        <p>Total Capacity: {data.summary.totalCapacity}</p>
-        <p>Total People Served: {data.summary.totalPeopleServed}</p>
-      </div> */}
-
       <div className="overflow-x-auto">
         <table className="w-full text-sm border-collapse">
           <thead className="bg-gray-100">
             <tr>
               <th className="border p-2">Name</th>
-              {/* <th className="border p-2">Division</th> */}
               <th className="border p-2">District</th>
               <th className="border p-2">Tehsil</th>
               <th className="border p-2">Latitude</th>

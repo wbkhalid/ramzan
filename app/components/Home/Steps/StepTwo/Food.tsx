@@ -37,8 +37,6 @@ const Food = ({
   const [menuLoading, setMenuLoading] = useState(false);
   const [servingLoading, setServingLoading] = useState(false);
 
-  console.log(parsedDastarkhawanId, "..//...//");
-
   const addMenuItem = () => {
     if (menuInput.trim() && !menuItems.includes(menuInput.trim())) {
       setMenuItems((prev) => [...prev, menuInput.trim()]);
@@ -87,6 +85,26 @@ const Food = ({
   };
 
   const handleSubmit = async () => {
+    if (menuItems.length < 1) {
+      toast.error("Please add at least one menu item");
+      return;
+    }
+
+    if (!menuPhotoUrl) {
+      toast.error("Menu photo is required");
+      return;
+    }
+
+    if (!numberServed || numberServed <= 0) {
+      toast.error("Number of beneficiaries must be greater than 0");
+      return;
+    }
+
+    if (!servingPhotoUrl) {
+      toast.error("Serving photo is required");
+      return;
+    }
+
     try {
       const payload = {
         dastarkhawanId: parsedDastarkhawanId,
