@@ -128,6 +128,8 @@ const Food = ({
         );
 
         setStepNo(3);
+      } else {
+        toast.error(response?.data?.responseMessage || "Submission failed");
       }
     } catch (error) {
       toast.error("Submission failed");

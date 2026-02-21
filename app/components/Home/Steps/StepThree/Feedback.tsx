@@ -119,6 +119,8 @@ const Feedback = ({
         );
         Cookies.remove("dastarkhawanId");
         setStepNo(0);
+      } else {
+        toast.error(response?.data?.responseMessage || "Submission failed");
       }
 
       console.log(response, "response");

@@ -241,6 +241,8 @@ const Setup = ({
       if (response?.data?.responseCode === 200) {
         toast.success("Step 1 (Setup) submitted successfully");
         setStepNo(2);
+      } else {
+        toast.error(response?.data?.responseMessage || "Submission failed");
       }
     } catch (error) {
       toast.error("Submission failed");
