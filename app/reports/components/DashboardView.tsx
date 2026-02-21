@@ -42,13 +42,13 @@ const DashboardView = ({ data }: { data: DashboardResponse }) => {
                 <td className="border p-2">{item.philanthropistName}</td>
                 <td className="border p-2">{item.monitoringStatus}</td>
                 <td className="border p-2">
-                  {item.step0Done ? "Completed" : "Not Completed"}
-                </td>
-                <td className="border p-2">
                   {item.step1Done ? "Completed" : "Not Completed"}
                 </td>
                 <td className="border p-2">
                   {item.step2Done ? "Completed" : "Not Completed"}
+                </td>
+                <td className="border p-2">
+                  {item.step3Done ? "Completed" : "Not Completed"}
                 </td>
                 <td className="border p-2">{item.numberServed}</td>
                 <td className="border p-2">{item.inspectionInchargeName}</td>
