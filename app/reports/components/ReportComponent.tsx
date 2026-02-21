@@ -179,7 +179,11 @@ const ReportComponent = () => {
         <div className="bg-white border rounded-lg overflow-hidden mb-2!">
           <div className="p-4 font-bold border-b grid grid-cols-4 gap-3">
             <p>Total Dastarkhawan: {dashboardData.summary.totalDastarkhawan}</p>
-            <p>Not Monitored: {dashboardData.summary.notMonitored}</p>
+            <p>
+              Not Monitored:{" "}
+              {dashboardData.summary.notMonitored +
+                dashboardData?.summary?.partiallyMonitored}
+            </p>
             <p>Monitored: {dashboardData.summary.fullyMonitored}</p>
           </div>
           <div className="p-4 font-bold border-b grid grid-cols-6 gap-3 text-xs">
