@@ -18,8 +18,10 @@ import { uploadFile } from "@/app/utils/utils";
 
 const Setup = ({
   setStepNo,
+  stepCompleted,
 }: {
   setStepNo: Dispatch<SetStateAction<number>>;
+  stepCompleted: boolean | null;
 }) => {
   const tehsilId = Cookies.get("tehsilId");
   const parsedTehsilId = tehsilId ? Number(tehsilId) : null;
@@ -248,267 +250,277 @@ const Setup = ({
   };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit();
-      }}
-    >
-      {/* DC Office Focal Person */}
-      <Flex direction="column" gap="4">
-        <Badge
-          radius="full"
-          color="blue"
-          className="text-[17px]! py-2.25! px-3.5!"
-        >
-          1
-        </Badge>
-        <CardHeader
-          heading="DC Office Focal Person Details"
-          headingSize="5"
-          label="Update Focal Person Details"
-        />
-        <CustomRadixInput
-          placeholder="Enter Name"
-          value={formData.dcFocalPersonName}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              dcFocalPersonName: e.target.value,
-            }))
-          }
-        />
-        <CustomRadixInput
-          placeholder="Enter Phone No."
-          value={formData.dcFocalPersonPhone}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              dcFocalPersonPhone: e.target.value,
-            }))
-          }
-        />
-        <UploadImagesForm
-          description="Focal Person Photo"
-          onChange={(e) =>
-            handleUpload(
-              "dastarkhawan_dc_focal_photo",
-              "dcFocalPersonPhotoUrl",
-              setDcPhotoLoading,
-              e,
-            )
-          }
-          selfieUrl={formData.dcFocalPersonPhotoUrl}
-          isLoading={dcPhotoLoading}
-        />
-      </Flex>
-
-      {/* Setup Details */}
-      <Flex direction="column" gap="4" className="mt-6">
-        <Badge
-          radius="full"
-          color="blue"
-          className="text-[17px]! py-2.25! px-3.5!"
-        >
-          2
-        </Badge>
-        <CardHeader
-          heading="Setup Details"
-          headingSize="5"
-          label="Update Setup Details"
-        />
-        <Flex
-          className="border border-dashed border-[#CBD5E1] p-4 rounded-4xl cursor-pointer"
-          justify="center"
-          onClick={getLocation}
-        >
-          <HugeiconsIcon size={24} icon={LocationShare02Icon} />
-          <Text weight="bold" color="green" className="ml-2">
-            Click to Capture Location
+    <>
+      {stepCompleted ? (
+        <div className="text-center py-4">
+          <Text className="text-green-500 font-bold">
+            Step 1 is already completed
           </Text>
-        </Flex>
-        <UploadImagesForm
-          description="Setup Photos"
-          onChange={(e) =>
-            handleUpload(
-              "dastarkhawan_setup_location_photo",
-              "setupLocationPhotoUrl",
-              setSetupPhotoLoading,
-              e,
-            )
-          }
-          selfieUrl={formData.setupLocationPhotoUrl}
-          isLoading={setupPhotoLoading}
-        />
-      </Flex>
-
-      {/* Branding Details */}
-      <Flex direction="column" gap="4" className="mt-6">
-        <Badge
-          radius="full"
-          color="blue"
-          className="text-[17px]! py-2.25! px-3.5!"
+        </div>
+      ) : (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
         >
-          3
-        </Badge>
-        <CardHeader
-          heading="Branding Details"
-          headingSize="5"
-          label="Update Branding Details"
-        />
-        <MyRadioGroup
-          options={[
-            { label: "Yes", value: "yes" },
-            { label: "No", value: "no" },
-          ]}
-          value={formData.brandingApplicable ? "yes" : "no"}
-          onChange={(val) =>
-            setFormData((prev) => ({
-              ...prev,
-              brandingApplicable: val === "yes",
-            }))
-          }
-        />
-        <UploadImagesForm
-          description="Branding Photos"
-          onChange={(e) =>
-            handleUpload(
-              "dastarkhawan_branding_photo",
-              "brandingPhotoUrl",
-              setBrandingPhotoLoading,
-              e,
-            )
-          }
-          selfieUrl={formData.brandingPhotoUrl}
-          isLoading={brandingPhotoLoading}
-        />
-      </Flex>
-
-      {/* Checklist */}
-      <Flex direction="column" gap="4" className="mt-6">
-        <Badge
-          radius="full"
-          color="blue"
-          className="text-[17px]! py-2.25! px-3.5!"
-        >
-          4
-        </Badge>
-        <CardHeader
-          heading="Regular Monitoring Checklist"
-          headingSize="5"
-          label="Verify operational standards"
-        />
-        <Box>
-          <Flex direction="column" className="gap-2.5">
-            {checkLists?.map((checklist, index) => {
-              const answer = checklistAnswers.find(
-                (a) => a.questionId === checklist.id,
-              );
-              const iconSrc = icons[index % icons.length]?.src;
-
-              return (
-                <Flex
-                  key={checklist.id}
-                  className="flex-col md:flex-row gap-2 w-full!"
-                >
-                  <Flex
-                    justify="between"
-                    className="flex-col md:flex-row border-[1.5px] border-[#EFF0F2] py-2.5 ps-3 pe-7.5 rounded-[7px] w-full"
-                    gap="4"
-                  >
-                    <CardHeader
-                      headingSize="3"
-                      headingWeight="medium"
-                      labelSize="2"
-                      gap="10px"
-                      heading={checklist.title}
-                      label={checklist.description}
-                      icon={
-                        <div className="p-2 bg-(--blue-9)/20 rounded-[10px]">
-                          <Image
-                            className="rounded-full"
-                            src={iconSrc}
-                            width={20}
-                            height={20}
-                            style={{ width: "24px", height: "24px" }}
-                            alt="icon"
-                          />
-                        </div>
-                      }
-                    />
-                    <MyRadioGroup
-                      options={
-                        checklist.answerType === 1
-                          ? [
-                              { label: "Excellent", value: "excellent" },
-                              { label: "Good", value: "good" },
-                              { label: "Average", value: "average" },
-                              { label: "Poor", value: "poor" },
-                            ]
-                          : [
-                              { label: "Yes", value: "yes" },
-                              { label: "No", value: "no" },
-                            ]
-                      }
-                      value={
-                        checklist.answerType === 1
-                          ? getGradeString(answer?.grade ?? 0)
-                          : answer?.yesNo
-                            ? "yes"
-                            : "no"
-                      }
-                      onChange={(val) =>
-                        handleChecklistChange(
-                          checklist.id,
-                          val,
-                          checklist.answerType,
-                        )
-                      }
-                    />
-                  </Flex>
-
-                  {/* Checklist photo upload */}
-                  <UploadImagesForm
-                    description="Upload Photo"
-                    onChange={(e) => handleChecklistPhoto(checklist.id, e)}
-                    selfieUrl={answer?.photoUrl ?? ""}
-                    isLoading={checklistLoadingId === checklist.id}
-                  />
-                </Flex>
-              );
-            })}
+          {/* DC Office Focal Person */}
+          <Flex direction="column" gap="4">
+            <Badge
+              radius="full"
+              color="blue"
+              className="text-[17px]! py-2.25! px-3.5!"
+            >
+              1
+            </Badge>
+            <CardHeader
+              heading="DC Office Focal Person Details"
+              headingSize="5"
+              label="Update Focal Person Details"
+            />
+            <CustomRadixInput
+              placeholder="Enter Name"
+              value={formData.dcFocalPersonName}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  dcFocalPersonName: e.target.value,
+                }))
+              }
+            />
+            <CustomRadixInput
+              placeholder="Enter Phone No."
+              value={formData.dcFocalPersonPhone}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  dcFocalPersonPhone: e.target.value,
+                }))
+              }
+            />
+            <UploadImagesForm
+              description="Focal Person Photo"
+              onChange={(e) =>
+                handleUpload(
+                  "dastarkhawan_dc_focal_photo",
+                  "dcFocalPersonPhotoUrl",
+                  setDcPhotoLoading,
+                  e,
+                )
+              }
+              selfieUrl={formData.dcFocalPersonPhotoUrl}
+              isLoading={dcPhotoLoading}
+            />
           </Flex>
-        </Box>
-      </Flex>
 
-      {/* Footer */}
-      <Flex
-        direction={{ initial: "column", md: "row" }}
-        justify={{ md: "between" }}
-        align={{ md: "center" }}
-        gap="3"
-        className="mt-6 w-full"
-      >
-        <Text className="text-sm">
-          <IoIosInformationCircle className="inline mr-1" />
-          All fields marked with <Text color="red">*</Text> are mandatory
-        </Text>
+          {/* Setup Details */}
+          <Flex direction="column" gap="4" className="mt-6">
+            <Badge
+              radius="full"
+              color="blue"
+              className="text-[17px]! py-2.25! px-3.5!"
+            >
+              2
+            </Badge>
+            <CardHeader
+              heading="Setup Details"
+              headingSize="5"
+              label="Update Setup Details"
+            />
+            <Flex
+              className="border border-dashed border-[#CBD5E1] p-4 rounded-4xl cursor-pointer"
+              justify="center"
+              onClick={getLocation}
+            >
+              <HugeiconsIcon size={24} icon={LocationShare02Icon} />
+              <Text weight="bold" color="green" className="ml-2">
+                Click to Capture Location
+              </Text>
+            </Flex>
+            <UploadImagesForm
+              description="Setup Photos"
+              onChange={(e) =>
+                handleUpload(
+                  "dastarkhawan_setup_location_photo",
+                  "setupLocationPhotoUrl",
+                  setSetupPhotoLoading,
+                  e,
+                )
+              }
+              selfieUrl={formData.setupLocationPhotoUrl}
+              isLoading={setupPhotoLoading}
+            />
+          </Flex>
 
-        <Button
-          type="submit"
-          color="green"
-          disabled={
-            submitLoading ||
-            dcPhotoLoading ||
-            setupPhotoLoading ||
-            brandingPhotoLoading ||
-            checklistLoadingId !== null
-          }
-        >
-          {submitLoading ? "Saving..." : "Save & Continue"}
-        </Button>
-      </Flex>
-    </form>
+          {/* Branding Details */}
+          <Flex direction="column" gap="4" className="mt-6">
+            <Badge
+              radius="full"
+              color="blue"
+              className="text-[17px]! py-2.25! px-3.5!"
+            >
+              3
+            </Badge>
+            <CardHeader
+              heading="Branding Details"
+              headingSize="5"
+              label="Update Branding Details"
+            />
+            <MyRadioGroup
+              options={[
+                { label: "Yes", value: "yes" },
+                { label: "No", value: "no" },
+              ]}
+              value={formData.brandingApplicable ? "yes" : "no"}
+              onChange={(val) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  brandingApplicable: val === "yes",
+                }))
+              }
+            />
+            <UploadImagesForm
+              description="Branding Photos"
+              onChange={(e) =>
+                handleUpload(
+                  "dastarkhawan_branding_photo",
+                  "brandingPhotoUrl",
+                  setBrandingPhotoLoading,
+                  e,
+                )
+              }
+              selfieUrl={formData.brandingPhotoUrl}
+              isLoading={brandingPhotoLoading}
+            />
+          </Flex>
+
+          {/* Checklist */}
+          <Flex direction="column" gap="4" className="mt-6">
+            <Badge
+              radius="full"
+              color="blue"
+              className="text-[17px]! py-2.25! px-3.5!"
+            >
+              4
+            </Badge>
+            <CardHeader
+              heading="Regular Monitoring Checklist"
+              headingSize="5"
+              label="Verify operational standards"
+            />
+            <Box>
+              <Flex direction="column" className="gap-2.5">
+                {checkLists?.map((checklist, index) => {
+                  const answer = checklistAnswers.find(
+                    (a) => a.questionId === checklist.id,
+                  );
+                  const iconSrc = icons[index % icons.length]?.src;
+
+                  return (
+                    <Flex
+                      key={checklist.id}
+                      className="flex-col md:flex-row gap-2 w-full!"
+                    >
+                      <Flex
+                        justify="between"
+                        className="flex-col md:flex-row border-[1.5px] border-[#EFF0F2] py-2.5 ps-3 pe-7.5 rounded-[7px] w-full"
+                        gap="4"
+                      >
+                        <CardHeader
+                          headingSize="3"
+                          headingWeight="medium"
+                          labelSize="2"
+                          gap="10px"
+                          heading={checklist.title}
+                          label={checklist.description}
+                          icon={
+                            <div className="p-2 bg-(--blue-9)/20 rounded-[10px]">
+                              <Image
+                                className="rounded-full"
+                                src={iconSrc}
+                                width={20}
+                                height={20}
+                                style={{ width: "24px", height: "24px" }}
+                                alt="icon"
+                              />
+                            </div>
+                          }
+                        />
+                        <MyRadioGroup
+                          options={
+                            checklist.answerType === 1
+                              ? [
+                                  { label: "Excellent", value: "excellent" },
+                                  { label: "Good", value: "good" },
+                                  { label: "Average", value: "average" },
+                                  { label: "Poor", value: "poor" },
+                                ]
+                              : [
+                                  { label: "Yes", value: "yes" },
+                                  { label: "No", value: "no" },
+                                ]
+                          }
+                          value={
+                            checklist.answerType === 1
+                              ? getGradeString(answer?.grade ?? 0)
+                              : answer?.yesNo
+                                ? "yes"
+                                : "no"
+                          }
+                          onChange={(val) =>
+                            handleChecklistChange(
+                              checklist.id,
+                              val,
+                              checklist.answerType,
+                            )
+                          }
+                        />
+                      </Flex>
+
+                      {/* Checklist photo upload */}
+                      <UploadImagesForm
+                        description="Upload Photo"
+                        onChange={(e) => handleChecklistPhoto(checklist.id, e)}
+                        selfieUrl={answer?.photoUrl ?? ""}
+                        isLoading={checklistLoadingId === checklist.id}
+                      />
+                    </Flex>
+                  );
+                })}
+              </Flex>
+            </Box>
+          </Flex>
+
+          {/* Footer */}
+          <Flex
+            direction={{ initial: "column", md: "row" }}
+            justify={{ md: "between" }}
+            align={{ md: "center" }}
+            gap="3"
+            className="mt-6 w-full"
+          >
+            <Text className="text-sm">
+              <IoIosInformationCircle className="inline mr-1" />
+              All fields marked with <Text color="red">*</Text> are mandatory
+            </Text>
+
+            <Button
+              type="submit"
+              color="green"
+              disabled={
+                submitLoading ||
+                dcPhotoLoading ||
+                setupPhotoLoading ||
+                brandingPhotoLoading ||
+                checklistLoadingId !== null
+              }
+            >
+              {submitLoading ? "Saving..." : "Save & Continue"}
+            </Button>
+          </Flex>
+        </form>
+      )}
+    </>
   );
 };
 

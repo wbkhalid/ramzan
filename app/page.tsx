@@ -7,9 +7,19 @@ import Setup from "./components/Home/Steps/StepOne/Setup";
 import Feedback from "./components/Home/Steps/StepThree/Feedback";
 import Food from "./components/Home/Steps/StepTwo/Food";
 import CardHeader from "./components/Navbar/CardHeader";
+import useStepsStatus from "./react-query/hooks/ramzan-monitoring/useStepsStatus";
+import Cookies from "js-cookie";
 
 export default function Home() {
   const [stepNo, setStepNo] = useState<number>(0);
+  const todayDate = new Date().toISOString().split("T")[0];
+  const dastarkhawanId = Cookies.get("dastarkhawanId");
+
+  const parsedDastarkhawanId = dastarkhawanId ? Number(dastarkhawanId) : 0;
+
+  const { data } = useStepsStatus(parsedDastarkhawanId, todayDate);
+
+  console.log(data, "dATAA");
 
   const steps = [
     {
@@ -79,9 +89,24 @@ export default function Home() {
                   ))}
                 </Flex>
               </div>
-              {stepNo === 1 && <Setup setStepNo={setStepNo} />}
-              {stepNo === 2 && <Food setStepNo={setStepNo} />}
-              {stepNo === 3 && <Feedback setStepNo={setStepNo} />}
+              {stepNo === 1 && (
+                <Setup
+                  setStepNo={setStepNo}
+                  stepCompleted={data?.step1Completed ?? false}
+                />
+              )}
+              {stepNo === 2 && (
+                <Food
+                  setStepNo={setStepNo}
+                  stepCompleted={data?.step2Completed ?? false}
+                />
+              )}
+              {stepNo === 3 && (
+                <Feedback
+                  setStepNo={setStepNo}
+                  stepCompleted={data?.step3Completed ?? false}
+                />
+              )}
             </div>
 
             {/* <MCQ
@@ -115,7 +140,10 @@ export default function Home() {
                   Update these field
                 </Text>
               </div>
-              <DailyUserInspectionForm setStepNo={setStepNo} />
+              <DailyUserInspectionForm
+                setStepNo={setStepNo}
+                stepCompleted={data?.step0Completed ?? false}
+              />
             </div>
           </div>
         </div>

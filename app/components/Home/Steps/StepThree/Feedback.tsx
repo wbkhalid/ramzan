@@ -17,8 +17,10 @@ import { uploadFile, uploadMultipleFiles } from "@/app/utils/utils";
 
 const Feedback = ({
   setStepNo,
+  stepCompleted,
 }: {
   setStepNo: Dispatch<SetStateAction<number>>;
+  stepCompleted: boolean | null;
 }) => {
   const [afterServingPhotoUrls, setAfterServingPhotoUrls] = useState<string[]>(
     [],
@@ -127,134 +129,145 @@ const Feedback = ({
 
   return (
     <>
-      <div className="py-5 gap-5 flex flex-wrap sm:flex-nowrap justify-center">
-        <Badge
-          radius="full"
-          color="green"
-          className="font-bold! text-sm  md:text-base! py-2.25! px-3.5!"
-        >
-          1
-        </Badge>
-
-        <div className="w-full">
-          <Flex justify="between" className="mb-5" wrap="wrap" gap="2">
-            <CardHeader
-              headingSize="4"
-              heading="Pictorial Evidence After Food Serving"
-              label="Upload photographic documentation"
-            />
-            {/* <MyBadge label="Deadline : 8:00 PM" /> */}
-          </Flex>
-
-          <div className="flex flex-col gap-2.5">
-            <div>
-              <UploadImagesForm
-                label="After Food Serving"
-                description="Upload Images"
-                onChange={handleImageChange}
-                isLoading={afterFoodLoading}
-              />
-
-              {/* Image Preview */}
-              {afterServingPhotoUrls.length > 0 && (
-                <div className="flex flex-wrap gap-3 mt-4">
-                  {afterServingPhotoUrls.map((url, index) => (
-                    <div
-                      key={index}
-                      className="relative w-16 h-16 rounded-lg overflow-hidden border"
-                    >
-                      <img
-                        src={url}
-                        alt={`after-serving-${index}`}
-                        className="w-full h-full object-cover"
-                      />
-
-                      {/* Remove Button */}
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setAfterServingPhotoUrls((prev) =>
-                            prev.filter((_, i) => i !== index),
-                          )
-                        }
-                        className="absolute top-1 right-1 bg-black/60 text-white text-xs px-1 rounded"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            <UploadImagesForm
-              label="Feedback Video"
-              description="Upload 30 sec Video"
-              message="MP4 (Max 10MB)"
-              accept="video/mp4"
-              type="video"
-              onChange={handleFeedbackVideoChange}
-              isLoading={videoLoading}
-            />
-          </div>
-
-          {/* Feedback Video */}
-
-          {/* Feedback Grade */}
-          <div className="mt-6">
-            <CardHeader
-              headingSize="4"
-              heading="Feedback by Food Officer"
-              label="Feedback"
-            />
-
-            <MyRadioGroup
-              options={[
-                { label: "Excellent", value: "excellent" },
-                { label: "Good", value: "good" },
-                { label: "Average", value: "average" },
-                { label: "Poor", value: "poor" },
-              ]}
-              onChange={(val) => setFeedbackGrade(getGradeNumber(val))}
-            />
-          </div>
-
-          {/* Additional Remarks */}
-          <div className="mt-6">
-            <CardHeader
-              headingSize="5"
-              heading="Additional Remarks"
-              label="Any observations or issues"
-            />
-            <CustomRadixTextarea
-              placeholder="Enter Remarks..."
-              value={additionalRemarks}
-              onChange={(e) => setAdditionalRemarks(e.target.value)}
-            />
-          </div>
+      {stepCompleted ? (
+        <div className="text-center py-4">
+          <Text className="text-green-500 font-bold">
+            Step 2 is already completed
+          </Text>
         </div>
-      </div>
+      ) : (
+        <>
+          <div className="py-5 gap-5 flex flex-wrap sm:flex-nowrap justify-center">
+            <Badge
+              radius="full"
+              color="green"
+              className="font-bold! text-sm  md:text-base! py-2.25! px-3.5!"
+            >
+              1
+            </Badge>
 
-      {/* Footer */}
-      <div className="border-t border-medium-gray pt-3.75 ">
-        <Flex
-          direction={{ initial: "column", md: "row" }}
-          justify={{ md: "between" }}
-          align={{ md: "center" }}
-          gap="3"
-          className="w-full"
-        >
-          <Flex align="center" gap="2">
-            <IoIosInformationCircle size={20} />
-            <Text size="2" weight="medium">
-              All fields marked with <Text color="red">*</Text> are mandatory
-            </Text>
-          </Flex>
+            <div className="w-full">
+              <Flex justify="between" className="mb-5" wrap="wrap" gap="2">
+                <CardHeader
+                  headingSize="4"
+                  heading="Pictorial Evidence After Food Serving"
+                  label="Upload photographic documentation"
+                />
+                {/* <MyBadge label="Deadline : 8:00 PM" /> */}
+              </Flex>
 
-          <Button type="button" onClick={handleSubmit} color="green">
-            Save & Continue
-          </Button>
-        </Flex>
-      </div>
+              <div className="flex flex-col gap-2.5">
+                <div>
+                  <UploadImagesForm
+                    label="After Food Serving"
+                    description="Upload Images"
+                    onChange={handleImageChange}
+                    isLoading={afterFoodLoading}
+                  />
+
+                  {/* Image Preview */}
+                  {afterServingPhotoUrls.length > 0 && (
+                    <div className="flex flex-wrap gap-3 mt-4">
+                      {afterServingPhotoUrls.map((url, index) => (
+                        <div
+                          key={index}
+                          className="relative w-16 h-16 rounded-lg overflow-hidden border"
+                        >
+                          <img
+                            src={url}
+                            alt={`after-serving-${index}`}
+                            className="w-full h-full object-cover"
+                          />
+
+                          {/* Remove Button */}
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setAfterServingPhotoUrls((prev) =>
+                                prev.filter((_, i) => i !== index),
+                              )
+                            }
+                            className="absolute top-1 right-1 bg-black/60 text-white text-xs px-1 rounded"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <UploadImagesForm
+                  label="Feedback Video"
+                  description="Upload 30 sec Video"
+                  message="MP4 (Max 10MB)"
+                  accept="video/mp4"
+                  type="video"
+                  onChange={handleFeedbackVideoChange}
+                  isLoading={videoLoading}
+                />
+              </div>
+
+              {/* Feedback Video */}
+
+              {/* Feedback Grade */}
+              <div className="mt-6">
+                <CardHeader
+                  headingSize="4"
+                  heading="Feedback by Food Officer"
+                  label="Feedback"
+                />
+
+                <MyRadioGroup
+                  options={[
+                    { label: "Excellent", value: "excellent" },
+                    { label: "Good", value: "good" },
+                    { label: "Average", value: "average" },
+                    { label: "Poor", value: "poor" },
+                  ]}
+                  onChange={(val) => setFeedbackGrade(getGradeNumber(val))}
+                />
+              </div>
+
+              {/* Additional Remarks */}
+              <div className="mt-6">
+                <CardHeader
+                  headingSize="5"
+                  heading="Additional Remarks"
+                  label="Any observations or issues"
+                />
+                <CustomRadixTextarea
+                  placeholder="Enter Remarks..."
+                  value={additionalRemarks}
+                  onChange={(e) => setAdditionalRemarks(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="border-t border-medium-gray pt-3.75 ">
+            <Flex
+              direction={{ initial: "column", md: "row" }}
+              justify={{ md: "between" }}
+              align={{ md: "center" }}
+              gap="3"
+              className="w-full"
+            >
+              <Flex align="center" gap="2">
+                <IoIosInformationCircle size={20} />
+                <Text size="2" weight="medium">
+                  All fields marked with <Text color="red">*</Text> are
+                  mandatory
+                </Text>
+              </Flex>
+
+              <Button type="button" onClick={handleSubmit} color="green">
+                Save & Continue
+              </Button>
+            </Flex>
+          </div>
+        </>
+      )}
     </>
   );
 };

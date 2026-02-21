@@ -16,11 +16,14 @@ import apiClient from "@/app/services/api-client";
 import Cookies from "js-cookie";
 import CustomSelect, { OptionType } from "../Form/CustomSelect";
 import useDastarKhwanLocations from "@/app/react-query/hooks/useDastarKhwanLocations";
+import useStepsStatus from "@/app/react-query/hooks/ramzan-monitoring/useStepsStatus";
 
 const DailyUserInspectionForm = ({
   setStepNo,
+  stepCompleted,
 }: {
   setStepNo: Dispatch<SetStateAction<number>>;
+  stepCompleted: boolean | null;
 }) => {
   const [isSubmitting, setSubmitting] = useState(false);
 
@@ -42,10 +45,24 @@ const DailyUserInspectionForm = ({
   const parsedTehsilId = tehsilId ? Number(tehsilId) : null;
 
   useEffect(() => {
-    if (dastarkhawanId) {
+    if (stepCompleted) {
       setStepNo(1);
     }
-  }, []);
+  }, [stepCompleted]);
+
+  // const todayDate = new Date().toISOString().split("T")[0];
+
+  // const parsedDastarkhawanId = dastarkhawanId ? Number(dastarkhawanId) : 0;
+
+  // const { data } = useStepsStatus(parsedDastarkhawanId, todayDate);
+
+  // console.log(data, "data");
+
+  // useEffect(() => {
+  //   if (dastarkhawanId) {
+  //     setStepNo(1);
+  //   }
+  // }, []);
 
   const { data: dastarKhwanLocations } = useDastarKhwanLocations(
     parsedTehsilId || 0,
