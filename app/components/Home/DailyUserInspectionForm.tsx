@@ -149,6 +149,8 @@ const DailyUserInspectionForm = ({
           expires: 1,
         });
         setStepNo(1);
+      } else {
+        toast.error(response?.data?.responseMessage || "Submission failed");
       }
 
       console.log(response, "response");
