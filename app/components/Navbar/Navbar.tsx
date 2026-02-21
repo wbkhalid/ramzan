@@ -45,7 +45,7 @@ const Navbar = () => {
   const today = new Date();
 
   // Calculate difference in days
-  const diffTime = today.getTime() - startDate.getTime(); // milliseconds
+  const diffTime = today.getTime() - startDate.getTime();
   const dayNumber = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const Navbar = () => {
                     Day {dayNumber} of 30
                   </Text>
                 </Flex>
-                <Badge
+                {/* <Badge
                   color="green"
                   className="py-3! px-6.5! rounded-[10px]! xs:hidden md:block"
                 >
@@ -86,9 +86,9 @@ const Navbar = () => {
                       Submitted Today
                     </Text>
                   </Flex>
-                </Badge>
+                </Badge> */}
 
-                <div className="h-10 w-px bg-[#D3D3D3]"></div>
+                {/* <div className="h-10 w-px bg-[#D3D3D3]"></div> */}
 
                 <IconButton
                   className="block lg:!hidden"

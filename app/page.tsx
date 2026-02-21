@@ -17,9 +17,15 @@ export default function Home() {
 
   const parsedDastarkhawanId = dastarkhawanId ? Number(dastarkhawanId) : 0;
 
-  const { data } = useStepsStatus(parsedDastarkhawanId, todayDate);
+  const { data, refetch } = useStepsStatus(parsedDastarkhawanId, todayDate);
 
-  // console.log(data, "dATAA");
+  const startDate = new Date("2026-02-19");
+
+  const today = new Date();
+
+  // Calculate difference in days
+  const diffTime = today.getTime() - startDate.getTime();
+  const dayNumber = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
   const steps = [
     {
@@ -52,7 +58,7 @@ export default function Home() {
             >
               <CardHeader
                 heading="Daily Data Submission"
-                label="Complete all mandatory fields for Day 1 - Feb 19, 2026"
+                label={`Complete all mandatory fields for Day ${dayNumber} - ${today.toDateString()}`}
                 headingColor="#fff"
                 labelColor="#F1F1F1"
               />
@@ -82,7 +88,10 @@ export default function Home() {
                       variant={stepNo === i + 1 ? "solid" : "soft"}
                       key={i + 1}
                       onClick={() => setStepNo(i + 1)}
-                      className="text-[11px]!"
+                      disabled={
+                        (i === 1 && !data?.step1Completed) ||
+                        (i === 2 && !data?.step2Completed)
+                      }
                     >
                       Step {i + 1}: {d.label}
                     </Button>
@@ -93,18 +102,21 @@ export default function Home() {
                 <Setup
                   setStepNo={setStepNo}
                   stepCompleted={data?.step1Completed ?? false}
+                  refetchStepsStatus={refetch}
                 />
               )}
               {stepNo === 2 && (
                 <Food
                   setStepNo={setStepNo}
                   stepCompleted={data?.step2Completed ?? false}
+                  refetchStepsStatus={refetch}
                 />
               )}
               {stepNo === 3 && (
                 <Feedback
                   setStepNo={setStepNo}
                   stepCompleted={data?.step3Completed ?? false}
+                  refetchStepsStatus={refetch}
                 />
               )}
             </div>

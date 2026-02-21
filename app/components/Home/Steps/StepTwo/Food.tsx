@@ -22,9 +22,11 @@ import apiClient from "@/app/services/api-client";
 const Food = ({
   setStepNo,
   stepCompleted,
+  refetchStepsStatus,
 }: {
   setStepNo: Dispatch<SetStateAction<number>>;
   stepCompleted: boolean | null;
+  refetchStepsStatus: () => void;
 }) => {
   const [menuInput, setMenuInput] = useState("");
   const [menuItems, setMenuItems] = useState<string[]>([]);
@@ -126,6 +128,8 @@ const Food = ({
           response?.data?.responseMessage ||
             "Step 1 (Setup) submitted successfully",
         );
+
+        refetchStepsStatus();
 
         setStepNo(3);
       } else {

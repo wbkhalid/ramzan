@@ -31,6 +31,7 @@ const useStepsStatus = (dastarkhawanId: number, date: string) =>
       return data.data;
     },
     staleTime: 60 * 1000,
+    enabled: !!dastarkhawanId,
   });
 
 export default useStepsStatus;

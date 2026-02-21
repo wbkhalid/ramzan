@@ -18,9 +18,11 @@ import { uploadFile, uploadMultipleFiles } from "@/app/utils/utils";
 const Feedback = ({
   setStepNo,
   stepCompleted,
+  refetchStepsStatus,
 }: {
   setStepNo: Dispatch<SetStateAction<number>>;
   stepCompleted: boolean | null;
+  refetchStepsStatus: () => void;
 }) => {
   const [afterServingPhotoUrls, setAfterServingPhotoUrls] = useState<string[]>(
     [],
@@ -92,6 +94,11 @@ const Feedback = ({
       return;
     }
 
+    if (!feedbackVideoUrl) {
+      toast.error("Please upload feedback video");
+      return;
+    }
+
     const payload = {
       dastarkhawanId: Number(Cookies.get("dastarkhawanId")),
       submissionDate: new Date().toISOString(),
@@ -117,6 +124,7 @@ const Feedback = ({
           response?.data?.responseMessage ||
             "Step 3 (Feedback) submitted successfully",
         );
+        refetchStepsStatus();
         Cookies.remove("dastarkhawanId");
         setStepNo(0);
       } else {

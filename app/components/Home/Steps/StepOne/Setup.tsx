@@ -19,9 +19,11 @@ import { uploadFile } from "@/app/utils/utils";
 const Setup = ({
   setStepNo,
   stepCompleted,
+  refetchStepsStatus,
 }: {
   setStepNo: Dispatch<SetStateAction<number>>;
   stepCompleted: boolean | null;
+  refetchStepsStatus: () => void;
 }) => {
   const tehsilId = Cookies.get("tehsilId");
   const parsedTehsilId = tehsilId ? Number(tehsilId) : null;
@@ -240,6 +242,7 @@ const Setup = ({
 
       if (response?.data?.responseCode === 200) {
         toast.success("Step 1 (Setup) submitted successfully");
+        refetchStepsStatus();
         setStepNo(2);
       } else {
         toast.error(response?.data?.responseMessage || "Submission failed");
