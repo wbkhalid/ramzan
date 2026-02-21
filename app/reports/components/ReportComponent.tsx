@@ -17,7 +17,7 @@ const ReportComponent = () => {
   );
 
   const [statusFilter, setStatusFilter] = useState<
-    "All" | "NotMonitored" | "FullyMonitored"
+    "All" | "NotFullyMonitored" | "FullyMonitored"
   >("All");
 
   // Fetch dashboard data
@@ -154,9 +154,9 @@ const ReportComponent = () => {
               <input
                 type="radio"
                 name="status"
-                value="NotMonitored"
-                checked={statusFilter === "NotMonitored"}
-                onChange={() => setStatusFilter("NotMonitored")}
+                value="NotFullyMonitored"
+                checked={statusFilter === "NotFullyMonitored"}
+                onChange={() => setStatusFilter("NotFullyMonitored")}
               />
               <Text>Not Monitored</Text>
             </label>
