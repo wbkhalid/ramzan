@@ -30,7 +30,7 @@ const UploadImagesForm = ({
       />
     </Badge>
   ),
-  message = "JPG, PNG (Max 5MB)",
+  message = "JPG, PNG ",
   accept = "image/png, image/jpeg, image/jpg",
   multiple = false,
   type = "image",

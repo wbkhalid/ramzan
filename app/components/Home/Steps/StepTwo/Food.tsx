@@ -49,6 +49,8 @@ const Food = ({
       setMenuLoading(true);
       const response = await uploadFile(e, "dastarkhawan_menu_photo");
 
+      console.log(response, "response");
+
       if (response?.data?.fileUrl) {
         setMenuPhotoUrl(response?.data?.fileUrl);
         toast.success("Menu photo uploaded successfully");
