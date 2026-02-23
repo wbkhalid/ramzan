@@ -13,7 +13,6 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Avatar,
-  Badge,
   Box,
   Container,
   DropdownMenu,
@@ -27,7 +26,6 @@ import classnames from "classnames";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { FaChevronDown, FaCircle } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
 import { toast } from "sonner";
@@ -44,7 +42,6 @@ const Navbar = () => {
 
   const today = new Date();
 
-  // Calculate difference in days
   const diffTime = today.getTime() - startDate.getTime();
   const dayNumber = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
@@ -60,7 +57,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="bg-white">
-        <div className="px-6.75 ">
+        <div className="px-2 lg:px-6.75 ">
           <Flex align="center" justify="between" wrap="wrap">
             <AppBrand />
             <div className="px-6.75 hidden! lg:block!">
@@ -70,12 +67,6 @@ const Navbar = () => {
                 wrap="wrap"
                 justify="center"
               >
-                <Flex className="py-3! px-6.5! bg-light-gray! rounded-[10px]! text-slate-gray! gap-2.5!">
-                  <HugeiconsIcon icon={Calendar02Icon} size={24} />
-                  <Text size="3" className="font-semibold!">
-                    Day {dayNumber} of 30
-                  </Text>
-                </Flex>
                 {/* <Badge
                   color="green"
                   className="py-3! px-6.5! rounded-[10px]! xs:hidden md:block"
@@ -91,7 +82,7 @@ const Navbar = () => {
                 {/* <div className="h-10 w-px bg-[#D3D3D3]"></div> */}
 
                 <IconButton
-                  className="block lg:!hidden"
+                  className="block lg:hidden!"
                   radius="full"
                   variant="soft"
                   size="4"
@@ -111,9 +102,20 @@ const Navbar = () => {
                 </Box> */}
               </Flex>
             </div>
-            <Box className="lg:hidden">
-              <AuthStatus session={session} onLogout={() => setSession(null)} />
-            </Box>
+            <div className="flex items-center gap-1.5">
+              <Flex className="py-1! lg:py-3! px-1.5 lg:px-6.5! bg-light-gray! rounded-[10px]! text-slate-gray! gap-2.5!">
+                <HugeiconsIcon icon={Calendar02Icon} size={20} />
+                <Text className="text-xs lg:text-base font-semibold!">
+                  Day {dayNumber} of 30
+                </Text>
+              </Flex>
+              <Box className="lg:hidden">
+                <AuthStatus
+                  session={session}
+                  onLogout={() => setSession(null)}
+                />
+              </Box>
+            </div>
           </Flex>
         </div>
         <div className="border-b border-[#3A3A3A]/10"></div>

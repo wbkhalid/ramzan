@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import DashboardView from "./DashboardView";
 import { DashboardResponse } from "../page";
 import * as XLSX from "xlsx";
+import Cookies from "js-cookie";
 
 const ReportComponent = () => {
   const [open, setOpen] = useState(false);
@@ -19,16 +20,24 @@ const ReportComponent = () => {
   const [statusFilter, setStatusFilter] = useState<
     "All" | "NotFullyMonitored" | "FullyMonitored"
   >("All");
+  const tehsilId = Cookies.get("tehsilId")
+    ? Number(Cookies.get("tehsilId"))
+    : null;
 
-  // Fetch dashboard data
-  const fetchDashboardData = async (date: string, status: string = "All") => {
+  const fetchDashboardData = async (
+    date: string,
+    status: string = "All",
+    tehsilId?: number | null,
+  ) => {
     if (!date) return;
+
     try {
       setLoading(true);
+
       const response = await apiClient.get(
         `/api/AdminDashboard/dashboard-summary?date=${date}${
-          status !== "All" ? `&status=${status}` : ""
-        }`,
+          tehsilId ? `&tehsilId=${tehsilId}` : ""
+        }${status !== "All" ? `&status=${status}` : ""}`,
       );
 
       if (response?.data?.responseCode === 200) {
@@ -47,16 +56,17 @@ const ReportComponent = () => {
       toast.error("Please select date");
       return;
     }
-    fetchDashboardData(selectedDate, statusFilter);
+
+    fetchDashboardData(selectedDate, statusFilter, tehsilId);
     setOpen(false);
   };
 
   // Re-fetch data on status change
   useEffect(() => {
     if (selectedDate) {
-      fetchDashboardData(selectedDate, statusFilter);
+      fetchDashboardData(selectedDate, statusFilter, tehsilId);
     }
-  }, [statusFilter]);
+  }, [statusFilter, tehsilId]);
 
   const getFormattedExportData = () => {
     if (!dashboardData?.items || dashboardData?.items.length === 0) {
@@ -98,24 +108,26 @@ const ReportComponent = () => {
     <>
       {/* Header */}
       <div className="bg-white border rounded-lg p-4 mb-6">
-        <Flex justify="between" align="center">
+        <Flex gap="1" justify="between" className="flex-col md:flex-row ">
           <Text weight="bold">Daily Dastarkhawan Statistics</Text>
 
-          <div className="flex gap-1 items-center">
-            <div
-              className="border rounded-lg p-1 cursor-pointer text-sm"
+          <div className="flex gap-2 items-center w-full md:w-auto">
+            <Button
+              className="border rounded-lg p-1 cursor-pointer text-sm flex-1! md:flex-none! bg-(--green-9)!"
               onClick={handleExportExcel}
             >
               Export Data
-            </div>
+            </Button>
 
             <Dialog.Root open={open} onOpenChange={setOpen}>
               <Dialog.Trigger>
-                <Button variant="soft">Select Date</Button>
+                <Button variant="soft" className="flex-1! md:flex-none! ">
+                  Select Date
+                </Button>
               </Dialog.Trigger>
 
-              <Dialog.Content maxWidth="450px">
-                <p className="text-center font-bold text-lg mb-3">
+              <Dialog.Content className="max-w-110!">
+                <p className="text-center font-bold text-lg mb-3 ">
                   Select Date
                 </p>
 
@@ -129,7 +141,7 @@ const ReportComponent = () => {
                 <Button
                   onClick={handleApply}
                   disabled={loading}
-                  className="w-full! mt-4! bg-green-500! cursor-pointer!"
+                  className="w-full! mt-4! bg-(--green-9)! cursor-pointer!"
                 >
                   {loading ? "Loading..." : "Apply"}
                 </Button>
@@ -177,16 +189,20 @@ const ReportComponent = () => {
       {/* Summary */}
       {dashboardData && (
         <div className="bg-white border rounded-lg overflow-hidden mb-2!">
-          <div className="p-4 font-bold border-b grid grid-cols-4 gap-3">
-            <p>Total Dastarkhawan: {dashboardData.summary.totalDastarkhawan}</p>
-            <p>
+          <div className="p-4 font-bold border-b grid grid-cols-2 md:grid-cols-3 gap-1 lg:gap-3 ">
+            <p className="text-sm md:text-base">
+              Total Dastarkhawan: {dashboardData.summary.totalDastarkhawan}
+            </p>
+            <p className="text-sm md:text-base">
               Not Monitored:{" "}
               {dashboardData.summary.notMonitored +
                 dashboardData?.summary?.partiallyMonitored}
             </p>
-            <p>Monitored: {dashboardData.summary.fullyMonitored}</p>
+            <p className="text-sm md:text-base">
+              Monitored: {dashboardData.summary.fullyMonitored}
+            </p>
           </div>
-          <div className="p-4 font-bold border-b grid grid-cols-6 gap-3 text-xs">
+          <div className="p-4 font-bold border-b grid grid-cols-2 lg:grid-cols-6 gap-3 text-xs">
             <p>Profile Completed: {dashboardData.summary.step0Completed}</p>
             <p>Step 1 : Setup {dashboardData.summary.step1Completed}</p>
             <p>Step 2 : Food {dashboardData.summary.step2Completed}</p>

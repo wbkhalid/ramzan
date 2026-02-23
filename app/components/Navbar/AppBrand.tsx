@@ -6,17 +6,21 @@ const AppBrand = () => {
   return (
     <div className="font-quicksand">
       <Link href="/">
-        <Flex className="gap-5.5" align="center" wrap="wrap" justify="center">
+        <Flex
+          className="gap-1 lg:gap-5.5"
+          align="center"
+          wrap="wrap"
+          justify="center"
+        >
           <Image
-            className="rounded-full"
             src="/icons/logo-green.svg"
+            alt="logo"
             width={50}
             height={50}
-            style={{ width: "50px", height: "50px" }}
-            alt="logo"
+            className="rounded-full w-7.5 h-7.5 lg:w-12.5 lg:h-12.5"
           />
           <Flex gap="0" direction="column">
-            <Heading size="4" className="font-quicksand">
+            <Heading className="font-quicksand text-sm! lg:text-xl!">
               Ramzan Daster Khwan
             </Heading>
             <Text size="1" weight="medium">

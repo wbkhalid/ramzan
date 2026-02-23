@@ -11,7 +11,7 @@ import useStepsStatus from "./react-query/hooks/ramzan-monitoring/useStepsStatus
 import Cookies from "js-cookie";
 
 export default function Home() {
-  const [stepNo, setStepNo] = useState<number>(0);
+  const [stepNo, setStepNo] = useState<number>(1);
   const todayDate = new Date().toISOString().split("T")[0];
   const dastarkhawanId = Cookies.get("dastarkhawanId");
 

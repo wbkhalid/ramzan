@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
+import Header from "../Header";
 
 const NavbarToggle = () => {
   const currentPath = usePathname();
@@ -14,7 +15,12 @@ const NavbarToggle = () => {
     currentPath !== "/new-location-dastarkhawan" &&
     currentPath !== "/new-location"
   ) {
-    return <Navbar />;
+    return (
+      <>
+        <Navbar />
+        <Header />
+      </>
+    );
   }
   // else {
   //   return <div style={{ height: "68px" }}></div>;
