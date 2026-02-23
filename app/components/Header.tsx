@@ -17,7 +17,7 @@ const Header = () => {
     {
       label: "Reports",
       icon: ChartRoseIcon,
-      route: "/reports",
+      route: "/single-report",
     },
   ];
 

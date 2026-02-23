@@ -7,24 +7,22 @@ import Header from "../Header";
 const NavbarToggle = () => {
   const currentPath = usePathname();
 
-  if (
-    currentPath !== "/login" &&
-    currentPath !== "/privacy-policy" &&
-    currentPath !== "/update-location" &&
-    currentPath !== "/update-location-dastarkhawan" &&
-    currentPath !== "/new-location-dastarkhawan" &&
-    currentPath !== "/new-location"
-  ) {
-    return (
-      <>
-        <Navbar />
-        <Header />
-      </>
-    );
-  }
-  // else {
-  //   return <div style={{ height: "68px" }}></div>;
-  // }
+  const showHeader = currentPath === "/" || currentPath === "/single-report";
+
+  const hideNavbar =
+    currentPath === "/login" ||
+    currentPath === "/privacy-policy" ||
+    currentPath === "/update-location" ||
+    currentPath === "/update-location-dastarkhawan" ||
+    currentPath === "/new-location-dastarkhawan" ||
+    currentPath === "/new-location";
+
+  return (
+    <>
+      {!hideNavbar && <Navbar />}
+      {showHeader && <Header />}
+    </>
+  );
 };
 
 export default NavbarToggle;
