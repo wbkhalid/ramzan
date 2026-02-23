@@ -47,7 +47,7 @@ export default function RootLayout({
             </QueryClientProvider>
             <div className="fixed bg-(--green-9) w-full bottom-0 z-10 pointer-events-none">
               <footer className="text-white bg-color-sea-blue text-center py-1">
-                Ramzan Daster Khwan by FSCPD
+                Ramzan Dastar Khwan by FSCPD
               </footer>
             </div>
           </ThemeSwitcher>

@@ -17,11 +17,11 @@ interface Props {
   value?: OptionType | OptionType[] | null;
   onChangeSingle?: (
     newValue: SingleValue<OptionType>,
-    actionMeta: ActionMeta<OptionType>
+    actionMeta: ActionMeta<OptionType>,
   ) => void;
   onChangeMulti?: (
     newValue: MultiValue<OptionType>,
-    actionMeta: ActionMeta<OptionType>
+    actionMeta: ActionMeta<OptionType>,
   ) => void;
   placeholder?: string;
   isClearable?: boolean;
@@ -36,7 +36,7 @@ interface Props {
   radius?: "pill" | undefined;
 }
 
-export type OptionType = { value: string; label: string };
+export type OptionType = { value: string | number; label: string };
 
 export const defaultOption = { value: "", label: "Select" };
 export const defaultNumberOption = { value: "0", label: "Select" };
@@ -66,7 +66,7 @@ const CustomSelect = forwardRef<HTMLDivElement, Props>(
       defaultValue,
       radius = undefined,
     },
-    _ref
+    _ref,
   ) => {
     const [menuPortalTarget, setMenuPortalTarget] =
       useState<HTMLElement | null>(null);
@@ -154,8 +154,8 @@ const CustomSelect = forwardRef<HTMLDivElement, Props>(
         backgroundColor: state.isSelected
           ? "#C2E7E4"
           : state.isFocused
-          ? "#E4EDEC"
-          : "white",
+            ? "#E4EDEC"
+            : "white",
         color: "#000",
         fontSize: "14px",
         padding: "10px",
@@ -460,7 +460,7 @@ const CustomSelect = forwardRef<HTMLDivElement, Props>(
         onChange={onChangeSingle}
       />
     );
-  }
+  },
 );
 
 CustomSelect.displayName = "CustomSelect";

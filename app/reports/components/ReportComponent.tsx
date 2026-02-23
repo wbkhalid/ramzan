@@ -8,26 +8,31 @@ import DashboardView from "./DashboardView";
 import { DashboardResponse } from "../page";
 import * as XLSX from "xlsx";
 import Cookies from "js-cookie";
+import CustomSelect from "@/app/components/Form/CustomSelect";
+import useGetAllDistricts from "@/app/react-query/hooks/ramzan-monitoring/useGetAllDistrict";
+import { usePathname } from "next/navigation";
 
 const ReportComponent = () => {
   const [open, setOpen] = useState(false);
+  const pathName = usePathname();
   const [selectedDate, setSelectedDate] = useState("");
   const [loading, setLoading] = useState(false);
   const [dashboardData, setDashboardData] = useState<DashboardResponse | null>(
     null,
   );
-
+  const [selectedDistrict, setSelectedDistrict] = useState<number | null>(null);
   const [statusFilter, setStatusFilter] = useState<
     "All" | "NotFullyMonitored" | "FullyMonitored"
   >("All");
   const tehsilId = Cookies.get("tehsilId")
     ? Number(Cookies.get("tehsilId"))
     : null;
-
+  const { data: districts } = useGetAllDistricts();
   const fetchDashboardData = async (
     date: string,
     status: string = "All",
     tehsilId?: number | null,
+    districtId?: number | null,
   ) => {
     if (!date) return;
 
@@ -37,7 +42,9 @@ const ReportComponent = () => {
       const response = await apiClient.get(
         `/api/AdminDashboard/dashboard-summary?date=${date}${
           tehsilId ? `&tehsilId=${tehsilId}` : ""
-        }${status !== "All" ? `&status=${status}` : ""}`,
+        }${districtId ? `&districtId=${districtId}` : ""}${
+          status !== "All" ? `&status=${status}` : ""
+        }`,
       );
 
       if (response?.data?.responseCode === 200) {
@@ -57,16 +64,21 @@ const ReportComponent = () => {
       return;
     }
 
-    fetchDashboardData(selectedDate, statusFilter, tehsilId);
+    fetchDashboardData(selectedDate, statusFilter, tehsilId, selectedDistrict);
+
     setOpen(false);
   };
 
-  // Re-fetch data on status change
   useEffect(() => {
     if (selectedDate) {
-      fetchDashboardData(selectedDate, statusFilter, tehsilId);
+      fetchDashboardData(
+        selectedDate,
+        statusFilter,
+        tehsilId,
+        selectedDistrict,
+      );
     }
-  }, [statusFilter, tehsilId]);
+  }, [statusFilter, tehsilId, selectedDistrict]);
 
   const getFormattedExportData = () => {
     if (!dashboardData?.items || dashboardData?.items.length === 0) {
@@ -107,7 +119,7 @@ const ReportComponent = () => {
   return (
     <>
       {/* Header */}
-      <div className="bg-white border rounded-lg p-4 mb-6">
+      <div className="bg-white border rounded-lg p-4 mb-2">
         <Flex gap="1" justify="between" className="flex-col md:flex-row ">
           <Text weight="bold">Daily Dastarkhwan Statistics</Text>
 
@@ -186,6 +198,29 @@ const ReportComponent = () => {
         )}
       </div>
 
+      {pathName === "/reports" && dashboardData && (
+        <div className="flex justify-between items-center mb-2">
+          <p className="text-sm md:text-base font-bold">Report Data</p>
+          <CustomSelect
+            options={
+              districts?.map((district) => ({
+                label: district.name,
+                value: district.id,
+              })) || []
+            }
+            placeholder="Select District"
+            value={
+              districts
+                ?.map((d) => ({ label: d.name, value: d.id }))
+                .find((opt) => opt.value === selectedDistrict) || null
+            }
+            onChangeSingle={(option) =>
+              setSelectedDistrict(option ? Number(option.value) : null)
+            }
+            isClearable
+          />
+        </div>
+      )}
       {/* Summary */}
       {dashboardData && (
         <div className="bg-white border rounded-lg overflow-hidden mb-2!">

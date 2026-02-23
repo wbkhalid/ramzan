@@ -221,7 +221,7 @@ const Form = ({ districtData, tehsilsData, userId }: Props) => {
       <div className="row m-0">
         <div className="col text-center">
           <Heading size="6" className="text-white fw-6 font-bold! mb-5">
-            Ramzan Daster Khwan
+            Ramzan Dastar Khwan
           </Heading>
         </div>
       </div>

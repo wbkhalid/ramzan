@@ -21,7 +21,7 @@ const AppBrand = () => {
           />
           <Flex gap="0" direction="column">
             <Heading className="font-quicksand text-sm! lg:text-xl!">
-              Ramzan Daster Khwan
+              Ramzan Dastar Khwan
             </Heading>
             <Text size="1" weight="medium">
               Monitoring & Evaluation System

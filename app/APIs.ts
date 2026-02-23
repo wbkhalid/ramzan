@@ -11,6 +11,7 @@ export const STALL_API = "/api/Stalls";
 export const COMMODITY_API = "/api/Commodities";
 export const CHECK_LIST_API = "/api/CheckLists";
 export const Daily_Monitoring_API = "/api/DastarkhawanDailyMonitoring";
+export const DISTRICTS_API = "/api/Districts";
 
 // NEXTJS ROUTES API
 export const NEXTJS_AUTH_API = "/api/my-auth";
