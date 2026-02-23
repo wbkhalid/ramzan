@@ -36,7 +36,7 @@ interface Props {
   radius?: "pill" | undefined;
 }
 
-export type OptionType = { value: string | number; label: string };
+export type OptionType = { value: string; label: string };
 
 export const defaultOption = { value: "", label: "Select" };
 export const defaultNumberOption = { value: "0", label: "Select" };

@@ -80,6 +80,12 @@ const ReportComponent = () => {
     }
   }, [statusFilter, tehsilId, selectedDistrict]);
 
+  const districtOptions =
+    districts?.map((district) => ({
+      label: district.name,
+      value: district.id.toString(),
+    })) || [];
+
   const getFormattedExportData = () => {
     if (!dashboardData?.items || dashboardData?.items.length === 0) {
       toast.warning("No data to export");
@@ -202,17 +208,12 @@ const ReportComponent = () => {
         <div className="flex justify-between items-center mb-2">
           <p className="text-sm md:text-base font-bold">Report Data</p>
           <CustomSelect
-            options={
-              districts?.map((district) => ({
-                label: district.name,
-                value: district.id,
-              })) || []
-            }
+            options={districtOptions}
             placeholder="Select District"
             value={
-              districts
-                ?.map((d) => ({ label: d.name, value: d.id }))
-                .find((opt) => opt.value === selectedDistrict) || null
+              districtOptions.find(
+                (opt) => opt.value === selectedDistrict?.toString(),
+              ) || null
             }
             onChangeSingle={(option) =>
               setSelectedDistrict(option ? Number(option.value) : null)
