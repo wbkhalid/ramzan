@@ -109,7 +109,7 @@ const ReportComponent = () => {
       {/* Header */}
       <div className="bg-white border rounded-lg p-4 mb-6">
         <Flex gap="1" justify="between" className="flex-col md:flex-row ">
-          <Text weight="bold">Daily Dastarkhawan Statistics</Text>
+          <Text weight="bold">Daily Dastarkhwan Statistics</Text>
 
           <div className="flex gap-2 items-center w-full md:w-auto">
             <Button
@@ -191,7 +191,7 @@ const ReportComponent = () => {
         <div className="bg-white border rounded-lg overflow-hidden mb-2!">
           <div className="p-4 font-bold border-b grid grid-cols-2 md:grid-cols-3 gap-1 lg:gap-3 ">
             <p className="text-sm md:text-base">
-              Total Dastarkhawan: {dashboardData.summary.totalDastarkhawan}
+              Total Dastarkhwan: {dashboardData.summary.totalDastarkhawan}
             </p>
             <p className="text-sm md:text-base">
               Not Monitored:{" "}
