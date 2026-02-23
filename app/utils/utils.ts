@@ -127,6 +127,38 @@ export const uploadFile = async (
   }
 };
 
+export const uploadVideoFile = async (
+  e: React.ChangeEvent<HTMLInputElement>,
+  category: string,
+) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  let finalFile = file;
+
+  console.log(finalFile, "finalFile");
+
+  const formData = new FormData();
+  formData.append("file", finalFile);
+  formData.append("category", category);
+
+  try {
+    const response = await apiClient.post(
+      `${UPLOAD_FILES_API}/upload-feedback-video`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    );
+
+    return response.data;
+  } catch (err) {
+    console.error("Upload failed:", err);
+  }
+};
+
 // export const uploadFile = async (
 //   e: React.ChangeEvent<HTMLInputElement>,
 //   category: string,

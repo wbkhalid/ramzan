@@ -13,7 +13,11 @@ import MyBadge from "@/app/components/MyBadge";
 import CardHeader from "../../../Navbar/CardHeader";
 import UploadImagesForm from "../UploadImagesForm";
 import apiClient from "@/app/services/api-client";
-import { uploadFile, uploadMultipleFiles } from "@/app/utils/utils";
+import {
+  uploadFile,
+  uploadMultipleFiles,
+  uploadVideoFile,
+} from "@/app/utils/utils";
 
 const Feedback = ({
   setStepNo,
@@ -60,7 +64,7 @@ const Feedback = ({
   ) => {
     try {
       setVideoLoading(true);
-      const response = await uploadFile(e, "dastarkhawan_feedback_video");
+      const response = await uploadVideoFile(e, "dastarkhawan_feedback_video");
 
       if (response?.data?.fileUrl) {
         setFeedbackVideoUrl(response.data.fileUrl);
