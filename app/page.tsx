@@ -19,6 +19,8 @@ export default function Home() {
 
   const { data, refetch } = useStepsStatus(parsedDastarkhawanId, todayDate);
 
+  console.log(data, "///..//.");
+
   const startDate = new Date("2026-02-19");
 
   const today = new Date();
@@ -155,6 +157,8 @@ export default function Home() {
               <DailyUserInspectionForm
                 setStepNo={setStepNo}
                 stepCompleted={data?.step0Completed ?? false}
+                isAftariHappening={data?.isAftariHappening ?? false}
+                refetchStepsStatus={refetch}
               />
             </div>
           </div>

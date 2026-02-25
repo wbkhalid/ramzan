@@ -21,9 +21,13 @@ import useStepsStatus from "@/app/react-query/hooks/ramzan-monitoring/useStepsSt
 const DailyUserInspectionForm = ({
   setStepNo,
   stepCompleted,
+  isAftariHappening,
+  refetchStepsStatus,
 }: {
   setStepNo: Dispatch<SetStateAction<number>>;
   stepCompleted: boolean | null;
+  isAftariHappening: boolean | null;
+  refetchStepsStatus: () => void;
 }) => {
   const [isSubmitting, setSubmitting] = useState(false);
 
@@ -31,6 +35,7 @@ const DailyUserInspectionForm = ({
     fullName: "",
     phone: "",
     siteName: "",
+    isAftariHappening: true,
   });
 
   const [selfieUrl, setSelfieUrl] = useState("");
@@ -45,10 +50,10 @@ const DailyUserInspectionForm = ({
   const parsedTehsilId = tehsilId ? Number(tehsilId) : null;
 
   useEffect(() => {
-    if (stepCompleted) {
+    if (stepCompleted && isAftariHappening) {
       setStepNo(1);
     }
-  }, [stepCompleted]);
+  }, [stepCompleted, isAftariHappening]);
 
   // useEffect(() => {
   //   if (dastarkhawanId) {
@@ -130,6 +135,7 @@ const DailyUserInspectionForm = ({
         inspectionInchargeLongitude: location?.lng,
         inspectionInchargeLocationAddress: location?.address,
         inspectionInchargeSelfieUrl: selfieUrl,
+        isAftariHappening: formData.isAftariHappening,
       };
 
       console.log(payload, "payload");
@@ -140,15 +146,25 @@ const DailyUserInspectionForm = ({
       );
 
       if (response?.data?.responseCode === 200) {
-        toast.success(
-          response?.data?.responseMessage ||
-            "Incharge details saved successfully.",
-        );
-        // Cookies.set("monitoringId", response?.data?.data?.id);
-        Cookies.set("dastarkhawanId", response?.data?.data?.dastarkhawanId, {
-          expires: 1,
-        });
-        setStepNo(1);
+        if (response?.data?.data?.isAftariHappening) {
+          toast.success(
+            response?.data?.responseMessage ||
+              "Incharge details saved successfully.",
+          );
+          Cookies.set("dastarkhawanId", response?.data?.data?.dastarkhawanId, {
+            expires: 1,
+          });
+          setStepNo(1);
+        } else {
+          toast.success(
+            response?.data?.responseMessage ||
+              "Aftari is not happening for this site today",
+          );
+          Cookies.set("dastarkhawanId", response?.data?.data?.dastarkhawanId, {
+            expires: 1,
+          });
+          // setStepNo(1);
+        }
       } else {
         toast.error(response?.data?.responseMessage || "Submission failed");
       }
@@ -158,6 +174,7 @@ const DailyUserInspectionForm = ({
       toast.error("Submission failed");
     } finally {
       setSubmitting(false);
+      refetchStepsStatus();
     }
   };
 
@@ -170,123 +187,176 @@ const DailyUserInspectionForm = ({
   console.log(dastarKhwanLocations, "dastarKhwanLocations");
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Flex direction="column" className="mb-5! gap-1.5!">
-        <label>
-          <Text
-            as="p"
-            mb="1"
-            weight="bold"
-            className="text-dark! text-[13px]! mb-2.5!"
-          >
-            Full Name <Text color="red">*</Text>
-          </Text>
-          <CustomRadixInput
-            placeholder="Enter Full Name"
-            size="3"
-            className="w-full! [&_input]:py-3.25! p-0! [&_input]:px-3! bg-[rgba(244,244,244,0.2)]! h-full! [&_input]:rounded-[10px]! rounded-[10px]! text-[#CBD5E1]! focus:ring-0! outline-0! ring-0! hover:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus-within:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! transition-all! duration-300! [&_input::placeholder]:text-[#CBD5E1]! [&_input::placeholder]:font-medium! [&_input::placeholder]:text-base!"
-            autoComplete="on"
-            onChange={(e) => handleChange("fullName", e.target.value)}
-          />
-          {/* <ErrorMessage varient="1">{errors.username?.message}</ErrorMessage> */}
-        </label>
-        <label>
-          <Text
-            as="p"
-            mb="1"
-            weight="bold"
-            className="text-dark! text-[13px]! mb-2.5!"
-          >
-            Phone No. <Text color="red">*</Text>
-          </Text>
-          <CustomRadixInput
-            type="number"
-            placeholder="Enter Phone No."
-            size="3"
-            className="w-full! [&_input]:py-3.25! p-0! [&_input]:px-3! bg-[rgba(244,244,244,0.2)]! h-full! [&_input]:rounded-[10px]! rounded-[10px]! text-[#CBD5E1]! focus:ring-0! outline-0! ring-0! hover:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus-within:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! transition-all! duration-300! [&_input::placeholder]:text-[#CBD5E1]! [&_input::placeholder]:font-medium! [&_input::placeholder]:text-base!"
-            autoComplete="on"
-            onChange={(e) => handleChange("phone", e.target.value)}
-          />
-          {/* <ErrorMessage varient="1">{errors.username?.message}</ErrorMessage> */}
-        </label>
-        <label>
-          <Text
-            as="p"
-            mb="1"
-            weight="bold"
-            className="text-dark! text-[13px]! mb-2.5!"
-          >
-            Site Name <Text color="red">*</Text>
-          </Text>
-
-          <CustomSelect
-            options={siteOptions}
-            placeholder="Select Site"
-            value={
-              siteOptions.find((opt) => opt.value === formData.siteName) || null
-            }
-            onChangeSingle={(option) => handleSiteChange(option)}
-            isClearable
-          />
-        </label>
-
-        <UploadImagesForm
-          label="Upload Selfie"
-          onChange={handleSelfieChange}
-          selfieUrl={selfieUrl}
-          description=""
-          buttonLabel=""
-          icon={
-            <Badge color="green" className="p-3! rounded-full!">
-              <HugeiconsIcon
-                icon={ImageUploadIcon}
-                size={30}
-                className="text-(--green-9)!"
+    <>
+      {stepCompleted && isAftariHappening === false ? (
+        <p className="font-semibold text-sm">
+          Aftari is not happening for this site today. Next steps are not
+          required.{" "}
+        </p>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <Flex direction="column" className="mb-5! gap-1.5!">
+            <label>
+              <Text
+                as="p"
+                mb="1"
+                weight="bold"
+                className="text-dark! text-[13px]! mb-2.5!"
+              >
+                Full Name <Text color="red">*</Text>
+              </Text>
+              <CustomRadixInput
+                placeholder="Enter Full Name"
+                size="3"
+                className="w-full! [&_input]:py-3.25! p-0! [&_input]:px-3! bg-[rgba(244,244,244,0.2)]! h-full! [&_input]:rounded-[10px]! rounded-[10px]! text-[#CBD5E1]! focus:ring-0! outline-0! ring-0! hover:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus-within:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! transition-all! duration-300! [&_input::placeholder]:text-[#CBD5E1]! [&_input::placeholder]:font-medium! [&_input::placeholder]:text-base!"
+                autoComplete="on"
+                onChange={(e) => handleChange("fullName", e.target.value)}
               />
-            </Badge>
-          }
-        />
-        <div
-          className="border border-dashed border-[#CBD5E1] p-4 rounded-4xl"
-          onClick={getLocation}
-        >
-          <Flex justify="center" className="mb-2.5">
-            <Badge radius="full" color="green" className="p-3!">
-              <HugeiconsIcon size={24} icon={LocationShare02Icon} />
-            </Badge>
-          </Flex>
+              {/* <ErrorMessage varient="1">{errors.username?.message}</ErrorMessage> */}
+            </label>
+            <label>
+              <Text
+                as="p"
+                mb="1"
+                weight="bold"
+                className="text-dark! text-[13px]! mb-2.5!"
+              >
+                Phone No. <Text color="red">*</Text>
+              </Text>
+              <CustomRadixInput
+                type="number"
+                placeholder="Enter Phone No."
+                size="3"
+                className="w-full! [&_input]:py-3.25! p-0! [&_input]:px-3! bg-[rgba(244,244,244,0.2)]! h-full! [&_input]:rounded-[10px]! rounded-[10px]! text-[#CBD5E1]! focus:ring-0! outline-0! ring-0! hover:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus-within:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! transition-all! duration-300! [&_input::placeholder]:text-[#CBD5E1]! [&_input::placeholder]:font-medium! [&_input::placeholder]:text-base!"
+                autoComplete="on"
+                onChange={(e) => handleChange("phone", e.target.value)}
+              />
+              {/* <ErrorMessage varient="1">{errors.username?.message}</ErrorMessage> */}
+            </label>
+            <label>
+              <Text
+                as="p"
+                mb="1"
+                weight="bold"
+                className="text-dark! text-[13px]! mb-2.5!"
+              >
+                Site Name <Text color="red">*</Text>
+              </Text>
 
-          <Text as="p" align="center" weight="bold" color="green" size="2">
-            Click Here{" "}
-            <Text className="text-slate-gray" weight="medium">
-              to Update your Location.
-            </Text>
-          </Text>
-        </div>
-      </Flex>
-      <Button
-        type="submit"
-        color="green"
-        // onClick={() => setStepNo(1)}
-        className={classnames({
-          "text-white!": isSubmitting,
-          "w-full! font-bold! text-[0.625rem]! py-1.5! lg:py-3! px-4.25! h-full! rounded-[10px]! shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! leading-[100%]!": true,
-        })}
-        radius="full"
-        disabled={
-          isSubmitting ||
-          !formData.fullName ||
-          !formData.phone ||
-          !selfieUrl ||
-          !location
-        }
-      >
-        <Text weight="bold" size="3">
-          Update
-        </Text>{" "}
-        {isSubmitting && <Spinner />}
-      </Button>
-    </form>
+              <CustomSelect
+                options={siteOptions}
+                placeholder="Select Site"
+                value={
+                  siteOptions.find((opt) => opt.value === formData.siteName) ||
+                  null
+                }
+                onChangeSingle={(option) => handleSiteChange(option)}
+                isClearable
+              />
+            </label>
+
+            <UploadImagesForm
+              label="Upload Selfie"
+              onChange={handleSelfieChange}
+              selfieUrl={selfieUrl}
+              description=""
+              buttonLabel=""
+              icon={
+                <Badge color="green" className="p-3! rounded-full!">
+                  <HugeiconsIcon
+                    icon={ImageUploadIcon}
+                    size={30}
+                    className="text-(--green-9)!"
+                  />
+                </Badge>
+              }
+            />
+            <div
+              className="border border-dashed border-[#CBD5E1] p-4 rounded-4xl"
+              onClick={getLocation}
+            >
+              <Flex justify="center" className="mb-2.5">
+                <Badge radius="full" color="green" className="p-3!">
+                  <HugeiconsIcon size={24} icon={LocationShare02Icon} />
+                </Badge>
+              </Flex>
+
+              <Text as="p" align="center" weight="bold" color="green" size="2">
+                Click Here{" "}
+                <Text className="text-slate-gray" weight="medium">
+                  to Update your Location.
+                </Text>
+              </Text>
+            </div>
+
+            <label>
+              <Text
+                as="p"
+                mb="2"
+                weight="bold"
+                className="text-dark! text-[13px]! mb-2.5!"
+              >
+                Is Aftari Happening? <Text color="red">*</Text>
+              </Text>
+
+              <Flex gap="4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="aftari"
+                    checked={formData.isAftariHappening === true}
+                    onChange={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        isAftariHappening: true,
+                      }))
+                    }
+                  />
+                  <Text>Yes</Text>
+                </label>
+
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="aftari"
+                    checked={formData.isAftariHappening === false}
+                    onChange={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        isAftariHappening: false,
+                      }))
+                    }
+                  />
+                  <Text>No</Text>
+                </label>
+              </Flex>
+            </label>
+          </Flex>
+          <Button
+            type="submit"
+            color="green"
+            // onClick={() => setStepNo(1)}
+            className={classnames({
+              "text-white!": isSubmitting,
+              "w-full! font-bold! text-[0.625rem]! py-1.5! lg:py-3! px-4.25! h-full! rounded-[10px]! shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! leading-[100%]!": true,
+            })}
+            radius="full"
+            disabled={
+              isSubmitting ||
+              !formData.fullName ||
+              !formData.phone ||
+              !selfieUrl ||
+              !location
+            }
+          >
+            <Text weight="bold" size="3">
+              Update
+            </Text>{" "}
+            {isSubmitting && <Spinner />}
+          </Button>
+        </form>
+      )}
+    </>
   );
 };
 

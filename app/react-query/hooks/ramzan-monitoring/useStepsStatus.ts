@@ -10,6 +10,7 @@ interface StepsStatus {
   step1Completed: boolean;
   step2Completed: boolean;
   step3Completed: boolean;
+  isAftariHappening: boolean;
 }
 
 interface StepsStatusResponse {
