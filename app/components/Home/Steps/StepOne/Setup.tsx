@@ -210,6 +210,30 @@ const Setup = ({
 
   const handleSubmit = async () => {
     try {
+      if (!formData.dcFocalPersonName.trim()) {
+        toast.error("DC Focal Person Name is required");
+        return;
+      }
+
+      if (!formData.dcFocalPersonPhone.trim()) {
+        toast.error("DC Focal Person Phone is required");
+        return;
+      }
+
+      if (!formData.dcFocalPersonPhotoUrl) {
+        toast.error("DC Focal Person Photo is required");
+        return;
+      }
+
+      // Checklist Photos Required
+      const missingChecklistPhoto = checklistAnswers.find(
+        (item) => !item.photoUrl,
+      );
+
+      if (missingChecklistPhoto) {
+        toast.error("All checklist item photos are required");
+        return;
+      }
       setSubmitLoading(true);
 
       const payload = {
