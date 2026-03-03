@@ -7,6 +7,10 @@ export interface DastarKhwanLocation {
   id: number;
   name: string;
   description: string;
+  philanthropistName: string | null;
+  philanthropistPhone: string | null;
+  organization: string | null;
+  serveCapacity: number;
   divisionId: number;
   districtId: number;
   tehsilId: number;

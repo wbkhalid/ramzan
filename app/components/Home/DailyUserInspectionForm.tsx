@@ -1,5 +1,5 @@
 "use client";
-import { Badge, Button, Flex, Text, TextField } from "@radix-ui/themes";
+import { Badge, Button, Flex, Text } from "@radix-ui/themes";
 import classnames from "classnames";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Spinner from "../Spinner";
@@ -16,7 +16,6 @@ import apiClient from "@/app/services/api-client";
 import Cookies from "js-cookie";
 import CustomSelect, { OptionType } from "../Form/CustomSelect";
 import useDastarKhwanLocations from "@/app/react-query/hooks/useDastarKhwanLocations";
-import useStepsStatus from "@/app/react-query/hooks/ramzan-monitoring/useStepsStatus";
 
 const DailyUserInspectionForm = ({
   setStepNo,
@@ -36,6 +35,10 @@ const DailyUserInspectionForm = ({
     phone: "",
     siteName: "",
     isAftariHappening: true,
+    philanthropistName: "",
+    philanthropistPhone: "",
+    serveCapacity: 0,
+    organization: "",
   });
 
   const [selfieUrl, setSelfieUrl] = useState("");
@@ -45,7 +48,6 @@ const DailyUserInspectionForm = ({
     address: string;
   } | null>(null);
   const userId = Cookies.get("userId");
-  const dastarkhawanId = Cookies.get("dastarkhawanId");
   const tehsilId = Cookies.get("tehsilId");
   const parsedTehsilId = tehsilId ? Number(tehsilId) : null;
 
@@ -108,16 +110,32 @@ const DailyUserInspectionForm = ({
   };
 
   const handleSiteChange = (option: OptionType | null) => {
+    const selectedSite = dastarKhwanLocations?.find(
+      (site) => site.id.toString() === option?.value,
+    );
+
     setFormData((prev) => ({
       ...prev,
       siteName: option?.value || "",
+      philanthropistName: selectedSite?.philanthropistName || "",
+      philanthropistPhone: selectedSite?.philanthropistPhone || "",
+      organization: selectedSite?.organization || "",
+      serveCapacity: selectedSite?.serveCapacity || 0,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.fullName || !formData.phone || !selfieUrl || !location) {
+    if (
+      !formData.fullName ||
+      !formData.phone ||
+      !selfieUrl ||
+      !location ||
+      !formData.philanthropistName ||
+      !formData.philanthropistPhone ||
+      !formData.serveCapacity
+    ) {
       toast.warning("Please fill all required fields");
       return;
     }
@@ -136,6 +154,10 @@ const DailyUserInspectionForm = ({
         inspectionInchargeLocationAddress: location?.address,
         inspectionInchargeSelfieUrl: selfieUrl,
         isAftariHappening: formData.isAftariHappening,
+        philanthropistName: formData.philanthropistName || null,
+        philanthropistPhone: formData.philanthropistPhone || null,
+        organization: formData.organization || null,
+        serveCapacity: formData.serveCapacity || null,
       };
 
       console.log(payload, "payload");
@@ -253,6 +275,96 @@ const DailyUserInspectionForm = ({
                 onChangeSingle={(option) => handleSiteChange(option)}
                 isClearable
               />
+            </label>
+            <label>
+              <Text
+                as="p"
+                mb="1"
+                weight="bold"
+                className="text-dark! text-[13px]! mb-2.5!"
+              >
+                Philanthropist Name <Text color="red">*</Text>
+              </Text>
+              <CustomRadixInput
+                placeholder="Enter Philanthropist Name"
+                size="3"
+                value={formData.philanthropistName || ""} // important
+                className="w-full! [&_input]:py-3.25! p-0! [&_input]:px-3! bg-[rgba(244,244,244,0.2)]! h-full! [&_input]:rounded-[10px]! rounded-[10px]! text-[#CBD5E1]! focus:ring-0! outline-0! ring-0! hover:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus-within:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! transition-all! duration-300! [&_input::placeholder]:text-[#CBD5E1]! [&_input::placeholder]:font-medium! [&_input::placeholder]:text-base!"
+                autoComplete="on"
+                onChange={(e) =>
+                  handleChange("philanthropistName", e.target.value)
+                }
+              />
+              {/* <ErrorMessage varient="1">
+                {errors.philanthropistName?.message}
+              </ErrorMessage> */}
+            </label>
+
+            <label>
+              <Text
+                as="p"
+                mb="1"
+                weight="bold"
+                className="text-dark! text-[13px]! mb-2.5!"
+              >
+                Philanthropist Phone No. <Text color="red">*</Text>
+              </Text>
+              <CustomRadixInput
+                type="number"
+                placeholder="Enter Phone No."
+                value={formData.philanthropistPhone || ""}
+                size="3"
+                className="w-full! [&_input]:py-3.25! p-0! [&_input]:px-3! bg-[rgba(244,244,244,0.2)]! h-full! [&_input]:rounded-[10px]! rounded-[10px]! text-[#CBD5E1]! focus:ring-0! outline-0! ring-0! hover:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus-within:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! transition-all! duration-300! [&_input::placeholder]:text-[#CBD5E1]! [&_input::placeholder]:font-medium! [&_input::placeholder]:text-base!"
+                autoComplete="on"
+                onChange={(e) =>
+                  handleChange("philanthropistPhone", e.target.value)
+                }
+              />
+              {/* <ErrorMessage varient="1">{errors.username?.message}</ErrorMessage> */}
+            </label>
+
+            <label>
+              <Text
+                as="p"
+                mb="1"
+                weight="bold"
+                className="text-dark! text-[13px]! mb-2.5!"
+              >
+                Serve Capacity <Text color="red">*</Text>
+              </Text>
+              <CustomRadixInput
+                placeholder="Enter Serve Capacity"
+                size="3"
+                value={formData.serveCapacity || ""} // important
+                className="w-full! [&_input]:py-3.25! p-0! [&_input]:px-3! bg-[rgba(244,244,244,0.2)]! h-full! [&_input]:rounded-[10px]! rounded-[10px]! text-[#CBD5E1]! focus:ring-0! outline-0! ring-0! hover:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus-within:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! transition-all! duration-300! [&_input::placeholder]:text-[#CBD5E1]! [&_input::placeholder]:font-medium! [&_input::placeholder]:text-base!"
+                autoComplete="on"
+                onChange={(e) => handleChange("serveCapacity", e.target.value)}
+              />
+              {/* <ErrorMessage varient="1">
+                {errors.philanthropistName?.message}
+              </ErrorMessage> */}
+            </label>
+
+            <label>
+              <Text
+                as="p"
+                mb="1"
+                weight="bold"
+                className="text-dark! text-[13px]! mb-2.5!"
+              >
+                Organization (Optional)
+              </Text>
+              <CustomRadixInput
+                placeholder="Enter Organization Name"
+                size="3"
+                value={formData.organization || ""} // important
+                className="w-full! [&_input]:py-3.25! p-0! [&_input]:px-3! bg-[rgba(244,244,244,0.2)]! h-full! [&_input]:rounded-[10px]! rounded-[10px]! text-[#CBD5E1]! focus:ring-0! outline-0! ring-0! hover:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! focus-within:shadow-[0px_0px_0px_1px_rgba(203,213,225,0.4)]! transition-all! duration-300! [&_input::placeholder]:text-[#CBD5E1]! [&_input::placeholder]:font-medium! [&_input::placeholder]:text-base!"
+                autoComplete="on"
+                onChange={(e) => handleChange("organization", e.target.value)}
+              />
+              {/* <ErrorMessage varient="1">
+                {errors.philanthropistName?.message}
+              </ErrorMessage> */}
             </label>
 
             <UploadImagesForm
