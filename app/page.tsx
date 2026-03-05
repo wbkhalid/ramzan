@@ -1,7 +1,7 @@
 "use client";
 import { Button, Flex, Heading, Text } from "@radix-ui/themes";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DailyUserInspectionForm from "./components/Home/DailyUserInspectionForm";
 import Setup from "./components/Home/Steps/StepOne/Setup";
 import Feedback from "./components/Home/Steps/StepThree/Feedback";
@@ -13,13 +13,18 @@ import Cookies from "js-cookie";
 export default function Home() {
   const [stepNo, setStepNo] = useState<number>(0);
   const todayDate = new Date().toISOString().split("T")[0];
-  const dastarkhawanId = Cookies.get("dastarkhawanId");
+  const [dastarkhawanId, setDastarkhawanId] = useState<number | null>(null);
+  // const dastarkhawanId = Cookies.get("dastarkhawanId");
 
-  const parsedDastarkhawanId = dastarkhawanId ? Number(dastarkhawanId) : 0;
+  // const parsedDastarkhawanId = dastarkhawanId ? Number(dastarkhawanId) : 0;
+  useEffect(() => {
+    const id = Cookies.get("dastarkhawanId");
+    if (id) {
+      setDastarkhawanId(Number(id));
+    }
+  }, []);
 
-  const { data, refetch } = useStepsStatus(parsedDastarkhawanId, todayDate);
-
-  console.log(data, "///..//.");
+  const { data, refetch } = useStepsStatus(dastarkhawanId ?? 0, todayDate);
 
   const startDate = new Date("2026-02-19");
 
@@ -159,6 +164,7 @@ export default function Home() {
                 stepCompleted={data?.step0Completed ?? false}
                 isAftariHappening={data?.isAftariHappening ?? false}
                 refetchStepsStatus={refetch}
+                setDastarkhawanId={setDastarkhawanId}
               />
             </div>
           </div>

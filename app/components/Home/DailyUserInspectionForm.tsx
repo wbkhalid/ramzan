@@ -22,11 +22,13 @@ const DailyUserInspectionForm = ({
   stepCompleted,
   isAftariHappening,
   refetchStepsStatus,
+  setDastarkhawanId,
 }: {
   setStepNo: Dispatch<SetStateAction<number>>;
   stepCompleted: boolean | null;
   isAftariHappening: boolean | null;
   refetchStepsStatus: () => void;
+  setDastarkhawanId: Dispatch<SetStateAction<number | null>>;
 }) => {
   const [isSubmitting, setSubmitting] = useState(false);
 
@@ -114,6 +116,14 @@ const DailyUserInspectionForm = ({
       (site) => site.id.toString() === option?.value,
     );
 
+    if (option?.value) {
+      const id = Number(option.value);
+
+      Cookies.set("dastarkhawanId", id.toString(), { expires: 1 });
+
+      setDastarkhawanId(id);
+    }
+
     setFormData((prev) => ({
       ...prev,
       siteName: option?.value || "",
@@ -185,6 +195,8 @@ const DailyUserInspectionForm = ({
           Cookies.set("dastarkhawanId", response?.data?.data?.dastarkhawanId, {
             expires: 1,
           });
+          setDastarkhawanId(response?.data?.data?.dastarkhawanId);
+
           // setStepNo(1);
         }
       } else {

@@ -24,9 +24,15 @@ const ReportComponent = () => {
   const [statusFilter, setStatusFilter] = useState<
     "All" | "NotFullyMonitored" | "FullyMonitored"
   >("All");
-  const tehsilId = Cookies.get("tehsilId")
-    ? Number(Cookies.get("tehsilId"))
-    : null;
+  const cookieTehsilId = Cookies.get("tehsilId");
+
+  const tehsilId =
+    pathName === "/reports"
+      ? null
+      : cookieTehsilId
+        ? Number(cookieTehsilId)
+        : null;
+
   const { data: districts } = useGetAllDistricts();
   const fetchDashboardData = async (
     date: string,

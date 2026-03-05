@@ -59,7 +59,7 @@ const CustomSelect = forwardRef<HTMLDivElement, Props>(
       isSearchable = true,
       isDisabled = false,
       isMulti = false,
-      closeMenuOnSelect = false,
+      closeMenuOnSelect = true,
       singleSelectStyles,
       menuPlacement = "auto",
       maxHeight = 43 * 6,
